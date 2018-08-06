@@ -5,28 +5,55 @@ from dateutil.parser import parse
 from datetime import datetime, time
 from flask import Flask, jsonify, request
 from flask_table import Table, Col
+
+
+# Initialize flask app
 app = Flask(__name__)
 
 
-# Declare table
 class PratkiTable(Table):
-    track_no = Col('Tracking #')
-    shipped_ago = Col('Shipped ago')
-    info_date = Col('Info/Date')
-    notice = Col('Notice')
-    pkg_name = Col('Item name')
+    no_items = 'There is no packages'
+    html_attrs = {'align': 'center'}
+    border = True
+
+    track_no = Col('Tracking #', td_html_attrs={
+        'align': 'center',
+        'width': '150'
+    })
+    shipped_ago = Col('Shipped ago (days)', td_html_attrs={
+        'align': 'right',
+        'width': '150'
+    })
+    info_date = Col('Info/Date', td_html_attrs={
+        'align': 'center',
+        'width': '150'
+    })
+    notice = Col('Notice', td_html_attrs={
+        'align': 'left',
+        'width': '150'
+    })
+    pkg_name = Col('Item name', td_html_attrs={
+        'align': 'left',
+        'width': '400'
+    })
 
 
 @app.route('/')
 def main():
-    dbx = dropbox.Dropbox("k3RJ3XBM0RsAAAAAAAADijeXigTJllDcGbCd_u54PNwO0WjtNLEXXaMddvijWBdS")
+    dbx = dropbox.Dropbox(
+        "k3RJ3XBM0RsAAAAAAAADijeXigTJllDcGbCd_u54PNwO0WjtNLEXXaMddvijWBdS")
 
     try:
+        # Try to read file from dropbox
         md, res = dbx.files_download('/pratki.txt')
     except Exception:
-        return 'Unknown file'
+        return '<h1 align="center">Unknown file</h1>'
 
+    # Decode bytes to string
     data = res.content.decode("utf-8")
+
+    if not data:
+        return '<h1 align="center">There is no packages</h1>'
 
     pkgs = [item.split(' - ') for item in data.split('\n')]
 
@@ -37,6 +64,13 @@ def main():
         shipped_ago = (datetime.now() - send_date).days
 
         if len(track_no) != 13:
+            fnl_data.append({
+                'track_no': track_no,
+                'shipped_ago': shipped_ago,
+                'info_date': "",
+                'notice': "",
+                'pkg_name': pkg_name
+            })
             continue
 
         r = requests.get(
@@ -90,14 +124,15 @@ def main():
             'pkg_name': pkg_name
         })
 
+    # Sort by shipped ago
+    fnl_data = sorted(fnl_data, key=lambda k: k['shipped_ago'])
+
+    # Return raw json data
     if request.is_json:
         return jsonify(fnl_data)
 
-    # Populate the table
-    table = PratkiTable(
-        sorted(fnl_data, key=lambda k: k['shipped_ago'])
-    )
-
+    # Populate and send html table
+    table = PratkiTable(fnl_data)
     return table.__html__()
 
 
