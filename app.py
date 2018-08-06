@@ -16,25 +16,30 @@ class PratkiTable(Table):
     html_attrs = {'align': 'center'}
     border = True
 
-    track_no = Col('Tracking #', td_html_attrs={
-        'align': 'center',
-        'width': '150'
-    })
-    shipped_ago = Col('Shipped ago (days)', td_html_attrs={
-        'align': 'right',
-        'width': '150'
-    })
-    info_date = Col('Info/Date', td_html_attrs={
-        'align': 'center',
-        'width': '150'
-    })
-    notice = Col('Notice', td_html_attrs={
-        'align': 'left',
-        'width': '150'
-    })
+    track_no = Col('Tracking #',
+        td_html_attrs={
+            'align': 'center', 'width': '150', 'height': '30'
+        }, th_html_attrs={
+            'height': "50"
+        }
+    )
+    shipped_ago = Col('Shipped ago (days)',
+        td_html_attrs={
+            'align': 'right', 'width': '150'
+        }
+    )
+    info_date = Col('Info/Date',
+        td_html_attrs={
+            'align': 'center', 'width': '150'
+        }
+    )
+    notice = Col('Notice',
+        td_html_attrs={
+            'align': 'left', 'width': '150'
+        }
+    )
     pkg_name = Col('Item name', td_html_attrs={
-        'align': 'left',
-        'width': '400'
+        'align': 'left', 'width': '400'
     })
 
 
