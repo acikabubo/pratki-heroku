@@ -3,3 +3,4 @@ flask-table
 gunicorn
 dropbox
 xmltodict
+python-dateutil
