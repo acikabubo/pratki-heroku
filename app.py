@@ -1,3 +1,4 @@
+import os
 import dropbox
 import requests
 import xmltodict
@@ -45,12 +46,12 @@ class PratkiTable(Table):
 
 @app.route('/')
 def main():
-    dbx = dropbox.Dropbox(
-        "k3RJ3XBM0RsAAAAAAAADijeXigTJllDcGbCd_u54PNwO0WjtNLEXXaMddvijWBdS")
-
     try:
+        dbx = dropbox.Dropbox(os.environ['DRPB_ACCESS_TOKEN'])
         # Try to read file from dropbox
         md, res = dbx.files_download('/pratki.txt')
+    except KeyError:
+        return '<h1 align="center">Missing dropbox access token</h1>'
     except Exception:
         return '<h1 align="center">Unknown file</h1>'
 
