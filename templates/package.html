@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <title>Package info</title>
+        <style rel="stylesheet" type="text/css">
+            th {
+                background-color: lightgreen;
+                height: 30px;
+                font-weight: bold;
+                text-align: center;
+                padding-right: 20px;
+                padding-left: 20px;
+            }
+            tr:nth-child(odd) {
+               background-color: #DFDCDB;
+            }
+            td {
+                padding-left: 5px;
+            }
+            .title-padding {
+                padding-top: 20px;
+                background-color: lime;
+            }
+        </style>
+    </head>
+    <body>
+        <h3 align="center"></h3>
+        <table align="center" border="1" bordercolor="#DFDCDB">
+            <tr>
+                <th class="title-padding" colspan="4"><h3>{{ data.track_no }} - {{ data.item_name }}<h3></th>
+            </tr>
+            <tr>
+                <th width="200px">From</th>
+                <th width="80px">To</th>
+                <th width="120px">Date</th>
+                <th width="150px">Notice</th>
+            </tr>
+            {% for item in data.fnl %}
+                <tr>
+                    <td>{{ item.from }}</td>
+                    <td>{{ item.to }}</td>
+                    <td>{{ item.date }}</td>
+                    <td>{{ item.notice }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
+

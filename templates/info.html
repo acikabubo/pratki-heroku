@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>Track Aliexpress packages</title>
+        <style rel="stylesheet" type="text/css">
+            th {
+                border: 1px solid black;
+                background-color: lightgreen;
+                height: 30px;
+                font-weight: bold;
+                text-align: center;
+                background-color: lightgreen;
+                padding-right: 20px;
+                padding-left: 20px;
+
+            }
+            tr:nth-child(even) {
+               background-color: #DFDCDB;
+            }
+            .num-padding {
+                padding-right: 5px;
+            }
+            .txt-padding {
+                padding-left: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <table align="center" border="1">
+            <tr>
+                <th width="120px">Tracking #</th>
+                <th>Shipped ago (days)</th>
+                <th width="120px">Info/Date</th>
+                <th width="120px">Notice</th>
+                <th width="300px">Item name</th>
+            </tr>
+            {% for item in fnl_data %}
+                <tr>
+                    {% if item.notice %}
+                        <td align="center">
+                            <a href={{ url_for('pkg_details', track_no=item.track_no, item_name=item.pkg_name)}} target="_blank">{{ item.track_no }}</a></td>
+                    {% else %}
+                        <td align="center">{{ item.track_no }}</a></td>
+                    {% endif %}
+                    <td class="num-padding" align="right">{{ item.shipped_ago }}</td>
+                    <td align="center">{{ item.info_date }}</td>
+                    <td class="txt-padding">{{ item.notice }}</td>
+                    <td class="txt-padding">{{ item.pkg_name }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
+

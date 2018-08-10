@@ -4,44 +4,11 @@ import requests
 import xmltodict
 from dateutil.parser import parse
 from datetime import datetime, time
-from flask import Flask, jsonify, request
-from flask_table import Table, Col
+from flask import Flask, render_template
 
 
 # Initialize flask app
 app = Flask(__name__)
-
-
-class PratkiTable(Table):
-    no_items = 'There is no packages'
-    html_attrs = {'align': 'center'}
-    border = True
-
-    track_no = Col('Tracking #',
-        td_html_attrs={
-            'align': 'center', 'width': '150', 'height': '30'
-        }, th_html_attrs={
-            'height': "50"
-        }
-    )
-    shipped_ago = Col('Shipped ago (days)',
-        td_html_attrs={
-            'align': 'right', 'width': '150'
-        }
-    )
-    info_date = Col('Info/Date',
-        td_html_attrs={
-            'align': 'center', 'width': '150'
-        }
-    )
-    notice = Col('Notice',
-        td_html_attrs={
-            'align': 'left', 'width': '150'
-        }
-    )
-    pkg_name = Col('Item name', td_html_attrs={
-        'align': 'left', 'width': '400'
-    })
 
 
 @app.route('/')
@@ -49,11 +16,11 @@ def main():
     try:
         dbx = dropbox.Dropbox(os.environ['DRPB_ACCESS_TOKEN'])
         # Try to read file from dropbox
-        md, res = dbx.files_download('/pratki.txt')
+        md, res = dbx.files_download(os.environ['FILE_PATH'])
     except KeyError:
-        return '<h1 align="center">Missing dropbox access token</h1>'
+        return '<h1 align="center">Missing dropbox access token or missing file path</h1>'
     except Exception:
-        return '<h1 align="center">Unknown file</h1>'
+        return '<h1 align="center">Error occurred while getting file from dropbox</h1>'
 
     # Decode bytes to string
     data = res.content.decode("utf-8")
@@ -133,14 +100,53 @@ def main():
     # Sort by shipped ago
     fnl_data = sorted(fnl_data, key=lambda k: k['shipped_ago'])
 
-    # Return raw json data
-    if request.is_json:
-        return jsonify(fnl_data)
+    # from flask import Flask, render_template, jsonify, request
+    # # Return raw json data
+    # if request.is_json:
+    #     return jsonify(fnl_data)
 
-    # Populate and send html table
-    table = PratkiTable(fnl_data)
-    return table.__html__()
+    return render_template('info.html', fnl_data=fnl_data)
 
+
+@app.route('/<track_no>/<item_name>')
+def pkg_details(track_no, item_name):
+    dt_format = '%d.%m.%Y'
+
+    r = requests.get(
+        'http://www.posta.com.mk/tnt/api/query?id=%s' % track_no)
+
+    # Convert xml data to dict
+    req_data = xmltodict.parse(r.text)
+
+    # Get required data
+    tracking_data = req_data['ArrayOfTrackingData']['TrackingData']
+
+    if type(tracking_data) != list:
+        tracking_data = [tracking_data]
+
+    fnl = []
+
+    for item in tracking_data:
+        row = list(item.items())
+
+        pkg_date = parse(row[3][1])
+        if pkg_date.time() != time(0, 0):
+            dt_format = '%d.%m.%Y %H:%M:%S'
+
+        fnl.append({
+            'from': row[1][1],
+            'to': row[2][1],
+            'date': parse(row[3][1]).strftime(dt_format),
+            'notice': row[4][1]
+        })
+
+    data = {
+        'fnl': fnl,
+        'track_no': track_no,
+        'item_name': item_name
+    }
+
+    return render_template('package.html', data=data)
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
