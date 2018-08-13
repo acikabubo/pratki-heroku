@@ -4,7 +4,7 @@ import requests
 import xmltodict
 from dateutil.parser import parse
 from datetime import datetime, time
-from flask import Flask, render_template
+from flask import Flask, request, jsonify, render_template
 
 
 # Initialize flask app
@@ -105,6 +105,9 @@ def main():
     # if request.is_json:
     #     return jsonify(fnl_data)
 
+    if request.is_json:
+        return jsonify(fnl_data)
+
     return render_template('info.html', fnl_data=fnl_data)
 
 
@@ -145,6 +148,9 @@ def pkg_details(track_no, item_name):
         'track_no': track_no,
         'item_name': item_name
     }
+
+    if request.is_json:
+        return jsonify(data)
 
     return render_template('package.html', data=data)
 

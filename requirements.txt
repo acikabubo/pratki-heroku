@@ -1,5 +1,4 @@
 Flask
-flask-table
 gunicorn
 dropbox
 xmltodict
