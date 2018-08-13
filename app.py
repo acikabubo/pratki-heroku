@@ -100,19 +100,16 @@ def main():
     # Sort by shipped ago
     fnl_data = sorted(fnl_data, key=lambda k: k['shipped_ago'])
 
-    # from flask import Flask, render_template, jsonify, request
-    # # Return raw json data
-    # if request.is_json:
-    #     return jsonify(fnl_data)
-
+    # Return raw json data
     if request.is_json:
         return jsonify(fnl_data)
 
     return render_template('info.html', fnl_data=fnl_data)
 
 
-@app.route('/<track_no>/<item_name>')
-def pkg_details(track_no, item_name):
+@app.route('/<track_no>/')
+def pkg_details(track_no):
+
     dt_format = '%d.%m.%Y'
 
     r = requests.get(
@@ -146,9 +143,10 @@ def pkg_details(track_no, item_name):
     data = {
         'fnl': fnl,
         'track_no': track_no,
-        'item_name': item_name
+        'item_name': request.args.get('item_name', 'NO PACKAGE NAME')
     }
 
+    # Return raw json data
     if request.is_json:
         return jsonify(data)
 
