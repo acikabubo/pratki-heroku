@@ -110,7 +110,15 @@ def main():
 @app.route('/<track_no>/')
 def pkg_details(track_no):
 
-    dt_format = '%d.%m.%Y'
+    # Initial data
+    data = {
+        'fnl': [],
+        'track_no': track_no,
+        'item_name': request.args.get('item_name', 'NO PACKAGE NAME')
+    }
+
+    if len(track_no) != 13:
+        return render_template('package.html', data=data)
 
     r = requests.get(
         'http://www.posta.com.mk/tnt/api/query?id=%s' % track_no)
@@ -118,14 +126,16 @@ def pkg_details(track_no):
     # Convert xml data to dict
     req_data = xmltodict.parse(r.text)
 
+    if not req_data['ArrayOfTrackingData']:
+        return render_template('package.html', data=data)
+
     # Get required data
     tracking_data = req_data['ArrayOfTrackingData']['TrackingData']
 
     if type(tracking_data) != list:
         tracking_data = [tracking_data]
 
-    fnl = []
-
+    dt_format = '%d.%m.%Y'
     for item in tracking_data:
         row = list(item.items())
 
@@ -133,18 +143,12 @@ def pkg_details(track_no):
         if pkg_date.time() != time(0, 0):
             dt_format = '%d.%m.%Y %H:%M:%S'
 
-        fnl.append({
+        data['fnl'].append({
             'from': row[1][1],
             'to': row[2][1],
             'date': parse(row[3][1]).strftime(dt_format),
             'notice': row[4][1]
         })
-
-    data = {
-        'fnl': fnl,
-        'track_no': track_no,
-        'item_name': request.args.get('item_name', 'NO PACKAGE NAME')
-    }
 
     # Return raw json data
     if request.is_json:
