@@ -30,14 +30,15 @@ def main():
 
     pkgs = [item.split(' - ') for item in data.split('\n')]
 
-    fnl_data = []
-
+    packages = []
+    waiting, arrived = 0, 0
     for track_no, pkg_date, pkg_name in pkgs:
         send_date = parse(pkg_date, dayfirst=True)
         shipped_ago = (datetime.now() - send_date).days
 
         if len(track_no) != 13:
-            fnl_data.append({
+            waiting += 1
+            packages.append({
                 'track_no': track_no,
                 'shipped_ago': shipped_ago,
                 'info_date': "",
@@ -58,7 +59,8 @@ def main():
         # Check if there is no package data
         # and add in table without Info/Data & Notice
         if not array_of_tracking_data:
-            fnl_data.append({
+            waiting += 1
+            packages.append({
                 'track_no': track_no,
                 'shipped_ago': shipped_ago,
                 'info_date': "",
@@ -89,7 +91,8 @@ def main():
         pkg_date = parse(package[3][1]).strftime(dt_format)
         pkg_notice = package[4][1]
 
-        fnl_data.append({
+        arrived += 1
+        packages.append({
             'track_no': track_no,
             'shipped_ago': shipped_ago,
             'info_date': pkg_date,
@@ -98,13 +101,23 @@ def main():
         })
 
     # Sort by shipped ago
-    fnl_data = sorted(fnl_data, key=lambda k: k['shipped_ago'])
+    packages = sorted(packages, key=lambda k: k['shipped_ago'])
 
     # Return raw json data
     if request.is_json:
-        return jsonify(fnl_data)
+        return jsonify(packages)
 
-    return render_template('info.html', fnl_data=fnl_data)
+    # Make final data
+    data = {
+        'packages': packages,
+        'info': {
+            'waiting': waiting,
+            'arrived': arrived,
+            'total': waiting + arrived
+        }
+    }
+
+    return render_template('info.html', data=data)
 
 
 @app.route('/<track_no>/')
