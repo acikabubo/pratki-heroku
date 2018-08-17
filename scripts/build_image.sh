@@ -1,5 +1,6 @@
 #!/bin/bash
-docker build --force-rm -t acikabubo/pratki-heroku .
+
+docker build --force-rm -t pratki-heroku .
 
 DANGLING=$(docker images -f "dangling=true" -q)
 if [ "x""$DANGLING" != "x" ]; then
