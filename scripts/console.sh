@@ -8,6 +8,7 @@ docker build --force-rm -t pratki-heroku $SRC
 docker create --rm -it \
     --name pratki-heroku \
     -v $SRC:/pratki-heroku \
+    --hostname server \
     -p 5000:5000 \
     pratki-heroku bash
 
