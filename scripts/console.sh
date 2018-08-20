@@ -11,7 +11,7 @@ docker create --rm -it \
     -p 5000:5000 \
     pratki-heroku bash
 
-docker run --rm -it -p 5000:5000 pratki-heroku bash
+docker start -a -i pratki-heroku
 
 DANGLING=$(docker images -f "dangling=true" -q)
 if [ "x""$DANGLING" != "x" ]; then
