@@ -4,9 +4,9 @@ IMIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SRC="$(dirname "$IMIN")"
 
 docker build --force-rm -t pratki-heroku \
-    --build-arg user=$USER \
-    --build-arg uid=`id -u $USER` \
-    --build-arg gid=`id -g $GROUP` \
+    --build-arg USER=$USER \
+    --build-arg UID=`id -u $USER` \
+    --build-arg GID=`id -g $GROUP` \
     $SRC
 
 docker create --rm -it \

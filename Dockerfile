@@ -4,8 +4,6 @@ LABEL Aleksandar Krsteski "krsteski_aleksandar@hotmail.com"
 
 ENV LANG=C.UTF-8
 
-ARG USER=acika
-
 # Update system and install tmux
 RUN apt-get update -qq  && \
     apt-get upgrade -yqq && \
@@ -17,11 +15,11 @@ RUN git config --global alias.s status && \
     git config --global alias.c checkout && \
     git config --global alias.b branch
 
-ARG user=devel
-ARG uid=1000
-ARG gid=1000
-RUN groupadd -g $gid $user; exit 0  # do not crash on already existing GID
-RUN useradd -ms /bin/bash -u $uid -g $gid $user
+ARG USER=devel
+ARG UID=1000
+ARG GID=1000
+RUN groupadd -g $GID $USER; exit 0  # do not crash on already existing GID
+RUN useradd -ms /bin/bash -u $UID -g $GID $USER
 
 ADD requirements.in /tmp/requirements.in
 
@@ -31,13 +29,10 @@ RUN pip3 install --upgrade pip
 RUN pip3 install pip-tools pip-review pipdeptree
 
 # Make requirements file and put in tmp folder
-RUN pip-compile /tmp/requirements.in
-ADD requirements.txt /tmp/requirements.txt
-
-# Install requirements
-# RUN pip3 install r /tmp/requirements.txt
+# RUN pip-compile /tmp/requirements.in
 
 # Sync packages
+ADD requirements /tmp/requirements.txt
 RUN pip-sync /tmp/requirements.txt
 
 # Remove tmp files
@@ -46,10 +41,6 @@ RUN rm -rf /tmp/requirements.in /tmp/requirements.txt
 # Set necessary env vars
 ENV DRPB_ACCESS_TOKEN k3RJ3XBM0RsAAAAAAAADi5DeRos9Wo6mqAe5QX1URifVxBo5JJY2LijhD1-U_Y_t
 ENV FILE_PATH /pratki.txt
-
-# Add user to sudo group
-# RUN useradd -m $USER && echo "$USER:$USER" | chpasswd && adduser $USER sudo && \
-#     echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
 
 USER $USER
 
