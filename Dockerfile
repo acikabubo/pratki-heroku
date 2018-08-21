@@ -17,6 +17,12 @@ RUN git config --global alias.s status && \
     git config --global alias.c checkout && \
     git config --global alias.b branch
 
+ARG user=devel
+ARG uid=1000
+ARG gid=1000
+RUN groupadd -g $gid $user; exit 0  # do not crash on already existing GID
+RUN useradd -ms /bin/bash -u $uid -g $gid $user
+
 ADD requirements.in /tmp/requirements.in
 
 # Install necessary packages
@@ -42,13 +48,15 @@ ENV DRPB_ACCESS_TOKEN k3RJ3XBM0RsAAAAAAAADi5DeRos9Wo6mqAe5QX1URifVxBo5JJY2LijhD1
 ENV FILE_PATH /pratki.txt
 
 # Add user to sudo group
-RUN useradd -m $USER && echo "$USER:$USER" | chpasswd && adduser $USER sudo && \
-    echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
+# RUN useradd -m $USER && echo "$USER:$USER" | chpasswd && adduser $USER sudo && \
+#     echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
 
-# USER $USER
+USER $USER
 
-ADD . /home/$USER/pratki-heroku
-WORKDIR /home/$USER/pratki-heroku
+ADD . /pratki-heroku
+RUN chown -R $user:$gid /pratki-heroku
+
+WORKDIR /pratki-heroku
 
 # Shell form of ENTRYPOINT ignores any CMD
 # or docker run command line arguments
