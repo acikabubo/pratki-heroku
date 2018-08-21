@@ -9,6 +9,11 @@ from flask import request, jsonify, render_template
 from app import app
 
 
+@app.route('/proba')
+def proba():
+    return render_template('proba.html')
+
+
 @app.route('/')
 def main():
     try:

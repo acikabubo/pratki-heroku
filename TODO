@@ -1,0 +1,4 @@
+- flask-bootstrap & flask-wtf
+- sync data from dropbox /pratki.txt to db
+- make login/logout functionality
+- interface for add/remove packages

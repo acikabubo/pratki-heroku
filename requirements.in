@@ -2,6 +2,8 @@ psycopg2-binary
 Flask
 flask-sqlalchemy
 flask-migrate
+flask-bootstrap
+Flask-WTF
 gunicorn
 dropbox
 xmltodict

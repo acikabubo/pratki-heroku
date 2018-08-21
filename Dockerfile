@@ -21,7 +21,6 @@ ARG GID=1000
 RUN groupadd -g $GID $USER; exit 0  # do not crash on already existing GID
 RUN useradd -ms /bin/bash -u $UID -g $GID $USER
 
-ADD requirements.in /tmp/requirements.in
 
 # Install necessary packages
 RUN pip3 install -U setuptools
@@ -29,10 +28,11 @@ RUN pip3 install --upgrade pip
 RUN pip3 install pip-tools pip-review pipdeptree
 
 # Make requirements file and put in tmp folder
+# ADD requirements.in /tmp/requirements.in
 # RUN pip-compile /tmp/requirements.in
 
 # Sync packages
-ADD requirements /tmp/requirements.txt
+ADD requirements.txt /tmp/requirements.txt
 RUN pip-sync /tmp/requirements.txt
 
 # Remove tmp files
