@@ -45,11 +45,11 @@ ENV FILE_PATH /pratki.txt
 RUN useradd -m $USER && echo "$USER:$USER" | chpasswd && adduser $USER sudo && \
     echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
 
-USER $USER
+# USER $USER
 
 ADD . /home/$USER/pratki-heroku
 WORKDIR /home/$USER/pratki-heroku
 
 # Shell form of ENTRYPOINT ignores any CMD
 # or docker run command line arguments
-ENTRYPOINT tmux new -s server bash
+# ENTRYPOINT tmux new -s server bash

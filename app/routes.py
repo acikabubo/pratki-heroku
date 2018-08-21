@@ -4,11 +4,9 @@ import requests
 import xmltodict
 from dateutil.parser import parse
 from datetime import datetime, time
-from flask import Flask, request, jsonify, render_template
+from flask import request, jsonify, render_template
 
-
-# Initialize flask app
-app = Flask(__name__)
+from app import app
 
 
 @app.route('/')

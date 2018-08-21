@@ -10,7 +10,7 @@ docker create --rm -it \
     -v $SRC:/pratki-heroku \
     --hostname server \
     -p 5000:5000 \
-    pratki-heroku bash
+    pratki-heroku tmux new -s server bash
 
 docker start -a -i pratki-heroku
 
