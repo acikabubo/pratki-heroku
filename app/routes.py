@@ -83,7 +83,8 @@ def proba():
     return render_template('proba.html', form=form, upload_form=upload_form)
 
 
-@app.route('/')
+# TODO: This route should be /info
+@app.route('/', methods=('GET', 'POST'))
 def main():
     try:
         dbx = dropbox.Dropbox(os.environ['DRPB_ACCESS_TOKEN'])
