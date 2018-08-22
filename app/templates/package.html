@@ -1,29 +1,35 @@
-<html>
-    <head>
-        <title>Package Info</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='package.css') }}">
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}">
-    </head>
-    <body>
-        <h3 align="center"></h3>
-        <table align="center" border="1" bordercolor="#DFDCDB">
-            <tr>
-                <th class="title-padding" colspan="4"><h3>{{ data.track_no }} - {{ data.item_name }}<h3></th>
-            </tr>
-            <tr>
-                <th width="200px">From</th>
-                <th width="80px">To</th>
-                <th width="120px">Date</th>
-                <th width="150px">Notice</th>
-            </tr>
-            {% for item in data.fnl %}
+{% extends "bootstrap/base.html" %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='package.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}"> {% endblock %}
+{% block title %}Package Info{% endblock %}
+{% block content %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+            <thead class="thead-light">
+                <tr>
+                    <th class="title-padding" colspan="4">
+                        <h5 align="center">{{ data.track_no }} - {{ data.item_name }}<h5>
+                    </th>
+                </tr>
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Date</th>
+                    <th>Notice</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data.fnl %}
                 <tr>
                     <td>{{ item.from }}</td>
                     <td>{{ item.to }}</td>
                     <td>{{ item.date }}</td>
                     <td>{{ item.notice }}</td>
                 </tr>
-            {% endfor %}
+                {% endfor %}
+            </tbody>
         </table>
-    </body>
-</html>
+    </div>
+{% endblock %}

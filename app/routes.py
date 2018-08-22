@@ -4,14 +4,83 @@ import requests
 import xmltodict
 from dateutil.parser import parse
 from datetime import datetime, time
-from flask import request, jsonify, render_template
+from app import app, db
+from flask import request, jsonify, render_template, redirect, flash, url_for
+from .forms import PackageForm, UploadForm
+from .models import Package
+from sqlalchemy.exc import IntegrityError
+from werkzeug.utils import secure_filename
+from flask_uploads import UploadSet, TEXT
 
-from app import app
 
 
-@app.route('/proba')
+@app.route('/proba', methods=('GET', 'POST'))
 def proba():
-    return render_template('proba.html')
+    form = PackageForm()
+    upload_form = UploadForm()
+    if form.validate_on_submit():
+        print('CREATE PACKAGE')
+
+        try:
+            package = Package(
+                track_no=form.track_no.data,
+                shipped_on=form.shipped_on.data,
+                name=form.name.data)
+
+            db.session.add(package)
+            db.session.commit()
+
+            flash('Package created successfully.', 'info')
+        except IntegrityError:
+            flash(
+                'There is package with tracking number: %s.' % form.track_no.data,
+                'warning')
+
+    if 'file' in request.files:
+        uploaded_file = request.files['file']
+
+        if uploaded_file:
+
+            try:
+                file_content = uploaded_file.read().decode('utf8')
+                pkgs = [item.split(' - ') for item in file_content.split('\n')]
+
+                total = 0
+                for track_no, shipped_on, pkg_name in pkgs:
+                    try:
+                        package = Package(
+                            track_no=track_no,
+                            shipped_on=shipped_on,
+                            name=pkg_name
+                        )
+                        db.session.add(package)
+                        db.session.flush()
+
+                        total += 1
+                    except IntegrityError:
+                        db.session.rollback()
+                        continue
+                    except Exception as ex:
+                        print(ex)
+                        # flash('Error occurred while syncing data.', 'warning')
+                db.session.commit()
+
+
+                if total:
+                    flash('Sync %s packages.' % total, 'info')
+                else:
+                    flash('There is no packages for sync.', 'info')
+
+            except Exception as ex:
+                print(str(ex))
+                flash(
+                    'Error occurred while reading file or invalid data format.', 'warning')
+
+            # filename = secure_filename(uploaded_file.filename)
+            # uploaded_file.save(os.path.join(
+            #     app.config['UPLOAD_FOLDER'], filename))
+
+    return render_template('proba.html', form=form, upload_form=upload_form)
 
 
 @app.route('/')
@@ -120,7 +189,68 @@ def main():
         }
     }
 
-    return render_template('info.html', data=data)
+    form = PackageForm()
+    upload_form = UploadForm()
+    if form.validate_on_submit():
+        try:
+            package = Package(
+                track_no=form.track_no.data,
+                shipped_on=form.shipped_on.data,
+                name=form.name.data)
+
+            db.session.add(package)
+            db.session.commit()
+
+            flash('Package created successfully.', 'info')
+        except IntegrityError:
+            flash(
+                'There is package with tracking number: %s.' % form.track_no.data,
+                'warning')
+
+    if 'file' in request.files:
+        uploaded_file = request.files['file']
+
+        if uploaded_file:
+            try:
+                file_content = uploaded_file.read().decode('utf8')
+                pkgs = [item.split(' - ') for item in file_content.split('\n')]
+
+                total = 0
+                for track_no, shipped_on, pkg_name in pkgs:
+                    try:
+                        package = Package(
+                            track_no=track_no,
+                            shipped_on=shipped_on,
+                            name=pkg_name
+                        )
+                        db.session.add(package)
+                        db.session.flush()
+
+                        total += 1
+                    except IntegrityError:
+                        db.session.rollback()
+                        continue
+                    except Exception as ex:
+                        print(ex)
+                        # flash('Error occurred while syncing data.', 'warning')
+                db.session.commit()
+
+                if total:
+                    flash('Sync %s packages.' % total, 'info')
+                else:
+                    flash('There is no packages for sync.', 'info')
+
+            except Exception as ex:
+                print(str(ex))
+                flash(
+                    'Error occurred while reading file or invalid data format.', 'warning')
+
+            # filename = secure_filename(uploaded_file.filename)
+            # uploaded_file.save(os.path.join(
+            #     app.config['UPLOAD_FOLDER'], filename))
+
+    return render_template('info.html',
+        data=data, form=form, upload_form=upload_form)
 
 
 @app.route('/<track_no>/')

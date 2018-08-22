@@ -2,3 +2,5 @@
 - sync data from dropbox /pratki.txt to db
 - make login/logout functionality
 - interface for add/remove packages
+- uploaded file for syncing packages need to be with user id prefix
+    <user_id>_filename.txt

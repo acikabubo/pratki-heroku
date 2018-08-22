@@ -1,38 +1,135 @@
-<html>
-    <head>
-        <title>Track Aliexpress Packages</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='info.css') }}">
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}">
-    </head>
-    <body>
-        <table align="center" border="1">
-            <tr>
-                <th width="120px">Tracking #</th>
-                <th>Shipped ago (days)</th>
-                <th width="120px">Info/Date</th>
-                <th width="120px">Notice</th>
-                <th width="300px">Item name</th>
-            </tr>
-            <tfoot>
+{% extends "bootstrap/base.html" %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='info.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}">
+{% endblock %}
+{% block title %}Track Packages{% endblock %}
+{% block content %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+            <thead class="thead-light">
                 <tr>
-                  <td align="center" colspan="5"><font color="grey">Total: {{ data.info.total }} / Waiting: {{ data.info.waiting }} / Arrived: {{ data.info.arrived }}</font></td>
+                    <th>Tracking #</th>
+                    <th>Shipped ago (days)</th>
+                    <th>Info/Date</th>
+                    <th>Notice</th>
+                    <th>Item name</th>
                 </tr>
-            </tfoot>
+            </thead>
+            <tbody>
             {% for item in data.packages %}
-                <tr>
-                    {% if item.notice %}
-                        <td align="center">
+                {% if item.notice %}
+                    <tr class="table-info">
+                        <td align="txt-padding">
                             <a href={{ url_for('pkg_details', track_no=item.track_no, item_name=item.pkg_name)}} target="_blank">{{ item.track_no }}</a></td>
-                    {% else %}
-                        <td align="center">{{ item.track_no }}</a></td>
-                    {% endif %}
+                {% else %}
+                    <tr>
+                        <td class="txt-padding">{{ item.track_no }}</a></td>
+                {% endif %}
                     <td class="num-padding" align="right">{{ item.shipped_ago }}</td>
                     <td align="center">{{ item.info_date }}</td>
                     <td class="txt-padding">{{ item.notice }}</td>
                     <td class="txt-padding">{{ item.pkg_name }}</td>
                 </tr>
             {% endfor %}
-            <tr></tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td align="center" colspan="5">
+                        <font color="grey">Total: {{ data.info.total }} / Waiting: {{ data.info.waiting }} / Arrived: {{ data.info.arrived }}</font>
+                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#modalNewSync">Add New Package
+                        </button>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
-    </body>
-</html>
+    </div>
+    <!-- Modal: New / Sync Form -->
+    <div class="modal fade" id="modalNewSync" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog cascading-modal" role="document">
+            <!-- End Content-->
+            <div class="modal-content">
+                <!--Modal cascading tabs-->
+                <div class="modal-c-tabs">
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs md-tabs tabs-2 light-blue darken-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#panelNewPackage" role="tab">New Package</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#panelSyncPackages" role="tab">Sync Packages</a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panels -->
+                    <div class="tab-content">
+
+                        <!-- Start New Package-->
+                        <div class="tab-pane fade in show active" id="panelNewPackage" role="tabpanel">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title">Add New Package</h5>
+                            </div>
+
+                            <!--Body-->
+                            <div class="modal-body mb-1">
+                                <form action="" method="post" role="form">
+                                    {{ form.csrf }}
+                                    <div class="form-group">
+                                        {{ form.hidden_tag() }}
+                                        <br> {{ form.track_no.label }} {{ form.track_no(size=16) }}
+                                        <br> {{ form.shipped_on.label }} {{ form.shipped_on(size=20) }}
+                                        <br> {{ form.name.label }} {{ form.name(size=64) }}
+                                    </div>
+
+                                    <center>
+                                        <button type="submit" class="btn btn-success">Submit</button>
+                                    </center>
+                                </form>
+                            </div>
+
+                            <!--Footer-->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                        <!-- End New Package 7-->
+
+                        <!--Start Sync Panel -->
+                        <div class="tab-pane fade" id="panelSyncPackages" role="tabpanel">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title">Choose file</h5>
+                            </div>
+
+                            <!--Body-->
+                            <div class="modal-body">
+                                <form action="" method="post" enctype="multipart/form-data" role="form">
+                                    {{ form.csrf }}
+                                    <div class="form-group">
+                                        {{ form.hidden_tag() }} {{ upload_form.file }}
+                                    </div>
+
+                                    <center>
+                                        <button type="submit" class="btn btn-success">Submit</button>
+                                    </center>
+                                </form>
+                            </div>
+                            <!-- Footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                        <!-- End Sync Panel -->
+                    </div>
+
+                </div>
+            </div>
+            <!-- End Content -->
+        </div>
+    </div>
+    <!-- End Modal -->
+{% endblock %}
+

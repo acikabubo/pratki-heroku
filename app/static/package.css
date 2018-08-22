@@ -16,3 +16,6 @@ td {
     padding-top: 20px;
     background-color: lime;
 }
+div.table-responsive {
+    padding: 15px;
+}
