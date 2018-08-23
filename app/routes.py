@@ -226,7 +226,7 @@ def info():
 
 
 @app.route('/<track_no>/')
-# @login_required
+@login_required
 def pkg_details(track_no):
 
     # Initial data
