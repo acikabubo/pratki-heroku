@@ -1,0 +1,44 @@
+{% extends "bootstrap/base.html" %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-social.css') }}"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='font-awesome.css') }}"> -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}">
+{% endblock %}
+{% block title %}Track Packages{% endblock %}
+{% block content %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'message' %}
+                    <div class="alert alert-warning" role="alert" align="center">
+                {% else %}
+                    <div class="alert alert-{{ category }}" role="alert" align="center">
+                {% endif %}
+                <strong>{{ category|title }}! </strong>{{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <script>
+        setTimeout("$('.alert').slideUp('slow')", 5000)
+    </script>
+    <div class="container">
+        <div class="jumbotron">
+            <h2><center>Track Packages</center></h2>
+        </div>
+        <div class="col-sm-2 center-div">
+            <a class="btn btn-block loginBtn loginBtn-facebook"
+                href="{{ url_for('oauth_authorize', provider='facebook') }}">
+                    Login with Facebook
+            </a>
+            <a class="btn btn-block loginBtn loginBtn-google"
+                href="{{ url_for('oauth_authorize', provider='google') }}">
+                    Login with Google
+            </a>
+        </div>
+    </div>
+
+    <!-- <p align="center"><a href="{{ url_for('oauth_authorize', provider='twitter') }}">Login with Twitter</a></p> -->
+{% endblock %}

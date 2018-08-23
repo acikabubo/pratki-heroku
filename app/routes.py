@@ -11,81 +11,51 @@ from .models import Package
 from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
 from flask_uploads import UploadSet, TEXT
+from flask_login import login_user, logout_user, current_user, login_required
+from .oauth import OAuthSignIn
+from .models import User
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 
-
-@app.route('/proba', methods=('GET', 'POST'))
-def proba():
-    form = PackageForm()
-    upload_form = UploadForm()
-    if form.validate_on_submit():
-        print('CREATE PACKAGE')
-
-        try:
-            package = Package(
-                track_no=form.track_no.data,
-                shipped_on=form.shipped_on.data,
-                name=form.name.data)
-
-            db.session.add(package)
-            db.session.commit()
-
-            flash('Package created successfully.', 'info')
-        except IntegrityError:
-            flash(
-                'There is package with tracking number: %s.' % form.track_no.data,
-                'warning')
-
-    if 'file' in request.files:
-        uploaded_file = request.files['file']
-
-        if uploaded_file:
-
-            try:
-                file_content = uploaded_file.read().decode('utf8')
-                pkgs = [item.split(' - ') for item in file_content.split('\n')]
-
-                total = 0
-                for track_no, shipped_on, pkg_name in pkgs:
-                    try:
-                        package = Package(
-                            track_no=track_no,
-                            shipped_on=shipped_on,
-                            name=pkg_name
-                        )
-                        db.session.add(package)
-                        db.session.flush()
-
-                        total += 1
-                    except IntegrityError:
-                        db.session.rollback()
-                        continue
-                    except Exception as ex:
-                        print(ex)
-                        # flash('Error occurred while syncing data.', 'warning')
-                db.session.commit()
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 
-                if total:
-                    flash('Sync %s packages.' % total, 'info')
-                else:
-                    flash('There is no packages for sync.', 'info')
+@app.route('/authorize/<provider>')
+def oauth_authorize(provider):
+    if not current_user.is_anonymous:
+        return redirect(url_for('info'))
+    oauth = OAuthSignIn.get_provider(provider)
+    return oauth.authorize()
 
-            except Exception as ex:
-                print(str(ex))
-                flash(
-                    'Error occurred while reading file or invalid data format.', 'warning')
 
-            # filename = secure_filename(uploaded_file.filename)
-            # uploaded_file.save(os.path.join(
-            #     app.config['UPLOAD_FOLDER'], filename))
-
-    return render_template('proba.html', form=form, upload_form=upload_form)
+@app.route('/callback/<provider>')
+def oauth_callback(provider):
+    if not current_user.is_anonymous:
+        return redirect(url_for('index'))
+    oauth = OAuthSignIn.get_provider(provider)
+    social_id, username, email = oauth.callback()
+    if social_id is None:
+        flash('Authentication failed.')
+        return redirect(url_for('index'))
+    user = User.query.filter_by(social_id=social_id).first()
+    if not user:
+        user = User(social_id=social_id, nickname=username, email=email)
+        db.session.add(user)
+        db.session.commit()
+    login_user(user, True)
+    return redirect(url_for('info'))
 
 
 # TODO: This route should be /info
-@app.route('/', methods=('GET', 'POST'))
-def main():
+@app.route('/info', methods=('GET', 'POST'))
+@login_required
+def info():
     try:
         dbx = dropbox.Dropbox(os.environ['DRPB_ACCESS_TOKEN'])
         # Try to read file from dropbox
@@ -204,6 +174,7 @@ def main():
 
             flash('Package created successfully.', 'info')
         except IntegrityError:
+            db.session.rollback()
             flash(
                 'There is package with tracking number: %s.' % form.track_no.data,
                 'warning')
@@ -255,6 +226,7 @@ def main():
 
 
 @app.route('/<track_no>/')
+# @login_required
 def pkg_details(track_no):
 
     # Initial data

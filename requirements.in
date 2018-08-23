@@ -1,10 +1,12 @@
 psycopg2-binary
 Flask
-flask-sqlalchemy
-flask-migrate
+Flask-Login
+Flask-Sqlalchemy
+Flask-Migrate
 Flask-Bootstrap4
 Flask-WTF
 Flask-Uploads
+rauth
 gunicorn
 dropbox
 xmltodict

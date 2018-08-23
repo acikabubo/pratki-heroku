@@ -2,6 +2,8 @@ import os
 
 
 class Config(object):
+    TEMPLATES_AUTO_RELOAD = True
+
     SECRET_KEY = "powerful secretkey"
     WTF_CSRF_SECRET_KEY = "a csrf secret key"
 
@@ -11,3 +13,15 @@ class Config(object):
 
     ALLOWED_EXTENSIONS = set(['txt'])
     UPLOAD_FOLDER = '/pratki-heroku/uploads'
+
+    # TODO: those settings should be env vars
+    OAUTH_CREDENTIALS = {
+        'facebook': {
+            'id': '1982853558673321',  # pratki facebook app
+            'secret': 'ea3bb54866a4bc6667a78cabca0034be'  # pratki facebook app
+        },
+        'twitter': {
+            'id': '3RzWQclolxWZIMq5LJqzRZPTl',
+            'secret': 'm9TEd58DSEtRrZHpz2EjrV9AhsBRxKMo8m3kuIZj3zLwzwIimt'
+        }
+    }

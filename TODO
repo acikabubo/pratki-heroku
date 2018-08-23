@@ -15,3 +15,5 @@ https://pythonprogramming.net/flask-registration-tutorial/?completed=/flask-user
 # facebook & twitter login
 https://blog.miguelgrinberg.com/post/oauth-authentication-with-flask
 https://github.com/miguelgrinberg/flask-oauth-example
+
+- reorganized app and try to use blueprints
