@@ -167,7 +167,8 @@ def info():
             package = Package(
                 track_no=form.track_no.data,
                 shipped_on=form.shipped_on.data,
-                name=form.name.data)
+                name=form.name.data,
+                user=current_user)
 
             db.session.add(package)
             db.session.commit()
