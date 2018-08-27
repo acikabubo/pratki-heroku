@@ -1,11 +1,8 @@
-- flask-bootstrap & flask-wtf
-- sync data from dropbox /pratki.txt to db
-- interface for add/remove packages
+- interface for remove packages
 - uploaded file for syncing packages need to be with user id prefix
     <user_id>_filename.txt
-- user registration & login/logout
 - material design?
-- flask social? facebook, google, twitter
+- flask social? facebook, google
 
 # User login/logout/registraion
 https://github.com/shekhargulati/flask-login-example/blob/master/flask-login-example.py
@@ -17,3 +14,5 @@ https://blog.miguelgrinberg.com/post/oauth-authentication-with-flask
 https://github.com/miguelgrinberg/flask-oauth-example
 
 - reorganized app and try to use blueprints
+- for shipped-on use date input
+- get data from db not from file
