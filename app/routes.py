@@ -15,8 +15,12 @@ from flask_login import login_user, logout_user, current_user, login_required
 from .oauth import OAuthSignIn
 from .models import User
 
+
 @app.route('/')
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('info'))
+
     return render_template('index.html')
 
 
@@ -93,8 +97,12 @@ def info():
         r = requests.get(
             'http://www.posta.com.mk/tnt/api/query?id=%s' % track_no)
 
-        # Convert xml data to dict
-        req_data = xmltodict.parse(r.text)
+        try:
+            # Convert xml data to dict
+            req_data = xmltodict.parse(r.text)
+        except Exception as ex:
+            print("Error occurred while parsing xml data: %s" % str(ex))
+            continue
 
         # Get required data
         array_of_tracking_data = req_data['ArrayOfTrackingData']
@@ -162,6 +170,7 @@ def info():
 
     form = PackageForm()
     upload_form = UploadForm()
+
     if form.validate_on_submit():
         try:
             package = Package(

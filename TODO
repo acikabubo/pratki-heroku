@@ -14,5 +14,5 @@ https://blog.miguelgrinberg.com/post/oauth-authentication-with-flask
 https://github.com/miguelgrinberg/flask-oauth-example
 
 - reorganized app and try to use blueprints
-- for shipped-on use date input
+- try to change shipped-on date format
 - get data from db not from file

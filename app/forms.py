@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import TextField, DateTimeField
+from wtforms import TextField, DateField
 from wtforms.validators import DataRequired, Length
 from flask_uploads import UploadSet, TEXT
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-
+from datetime import date, timedelta
 
 txt = UploadSet('txts', TEXT)
 
@@ -27,10 +27,14 @@ class PackageForm(FlaskForm):
         render_kw={
             'class': 'form-control',
             'placeholder': 'Enter track #'})
-    shipped_on = DateTimeField('Shipped on',
+    shipped_on = DateField('Shipped on',
         validators=[DataRequired()],
         render_kw={
-            'type': 'date',
+            'type': 'text',
+            'onfocus': "(this.type='date')",
+            'onblur': "if(this.value==''){this.type='text'}",
+            'min': date.today()-timedelta(days=30),
+            'max': date.today(),
             'class': 'form-control',
             'placeholder': 'Shipped On'})
 

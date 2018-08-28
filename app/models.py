@@ -23,7 +23,7 @@ def load_user(id):
 class Package(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     track_no = db.Column(db.String(16), unique=True)
-    shipped_on = db.Column(db.String(20))
+    shipped_on = db.Column(db.Date)
     name = db.Column(db.String(64))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
