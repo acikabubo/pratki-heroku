@@ -16,3 +16,6 @@ https://github.com/miguelgrinberg/flask-oauth-example
 - reorganized app and try to use blueprints
 - try to change shipped-on date format
 - get data from db not from file
+
+https://pythonhosted.org/Flask-Scss/
+https://flask-assets.readthedocs.io/en/latest/

@@ -9,11 +9,6 @@
 
 {% block content %}
     {{ super() }}
-    {% if current_user.is_authenticated %}
-        <h2>Hi, {{ current_user.nickname }}!</h2>
-        <h2>User id, {{ current_user.id }}!</h2>
-        <p><a href="{{ url_for('logout') }}">Logout</a></p>
-    {% endif %}
     <div class="table-responsive">
         <table class="table table-bordered table-striped table-hover table-sm ">
             <thead class="thead-light">
@@ -140,4 +135,3 @@
     </div>
     <!-- End Modal -->
 {% endblock %}
-
