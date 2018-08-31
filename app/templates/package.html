@@ -8,33 +8,42 @@
 {% block title %}Package Info{% endblock %}
 
 {% block content %}
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover table-sm">
-            <thead class="thead-light">
-                <tr>
-                    <th class="title-padding" colspan="4">
-                        <h5 align="center">
-                            <strong>{{ data.track_no }} - {{ data.item_name }}</strong>
-                        <h5>
-                    </th>
-                </tr>
-                <tr>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>Date</th>
-                    <th>Notice</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in data.fnl %}
-                <tr>
-                    <td>{{ item.from }}</td>
-                    <td>{{ item.to }}</td>
-                    <td>{{ item.date }}</td>
-                    <td>{{ item.notice }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    {% if data.fnl %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-sm">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="title-padding" colspan="4">
+                            <h5 align="center">
+                                <strong>{{ data.track_no }} - {{ data.item_name }}</strong>
+                            <h5>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Date</th>
+                        <th>Notice</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in data.fnl %}
+                    <tr>
+                        <td>{{ item.from }}</td>
+                        <td>{{ item.to }}</td>
+                        <td>{{ item.date }}</td>
+                        <td>{{ item.notice }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="jumbotron"  style="background-color:transparent;">
+            <center>
+                <h4>No data for {{ data.track_no }} - {{ data.item_name }}</h4>
+            </center>
+        </div>
+    {% endif %}
+
 {% endblock %}

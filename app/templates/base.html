@@ -15,9 +15,6 @@
 
 {% block content %}
     {{ super() }}
-    {% if current_user.is_authenticated %}
-        <p class="username">Hi, <strong>{{ current_user.nickname }}</strong>! <a href="{{ url_for('logout') }}">Logout</a></p>
-    {% endif %}
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
@@ -31,4 +28,7 @@
             {% endfor %}
         {% endif %}
     {% endwith %}
+    {% if current_user.is_authenticated %}
+        <p class="username">Hi, <strong>{{ current_user.nickname }}</strong>! <a href="{{ url_for('logout') }}">Logout</a></p>
+    {% endif %}
 {% endblock %}

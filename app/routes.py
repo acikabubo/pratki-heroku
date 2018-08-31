@@ -1,5 +1,3 @@
-import os
-import dropbox
 import requests
 import xmltodict
 from dateutil.parser import parse
@@ -7,13 +5,10 @@ from datetime import datetime, time
 from app import app, db
 from flask import request, jsonify, render_template, redirect, flash, url_for
 from .forms import PackageForm, UploadForm
-from .models import Package
+from .models import User, Package
 from sqlalchemy.exc import IntegrityError
-from werkzeug.utils import secure_filename
-from flask_uploads import UploadSet, TEXT
 from flask_login import login_user, logout_user, current_user, login_required
 from .oauth import OAuthSignIn
-from .models import User
 
 
 @app.route('/')
@@ -60,27 +55,16 @@ def oauth_callback(provider):
 @app.route('/info', methods=('GET', 'POST'))
 @login_required
 def info():
-    try:
-        dbx = dropbox.Dropbox(os.environ['DRPB_ACCESS_TOKEN'])
-        # Try to read file from dropbox
-        md, res = dbx.files_download(os.environ['FILE_PATH'])
-    except KeyError:
-        return '<h1 align="center">Missing dropbox access token or missing file path</h1>'
-    except Exception:
-        return '<h1 align="center">Error occurred while getting file from dropbox</h1>'
-
-    # Decode bytes to string
-    data = res.content.decode("utf-8")
-
-    if not data:
-        return '<h1 align="center">There is no packages</h1>'
-
-    pkgs = [item.split(' - ') for item in data.split('\n')]
+    # Get packages from logged user
+    pkgs = Package.query.filter_by(user=current_user).all()
 
     packages = []
     waiting, arrived = 0, 0
-    for track_no, pkg_date, pkg_name in pkgs:
-        send_date = parse(pkg_date, dayfirst=True)
+    for item in pkgs:
+        track_no = item.track_no
+        pkg_date = item.shipped_on
+        pkg_name = item.name
+        send_date = datetime.combine(pkg_date, datetime.min.time())
         shipped_ago = (datetime.now() - send_date).days
 
         if len(track_no) != 13:
@@ -194,6 +178,8 @@ def info():
 
         if uploaded_file:
             try:
+                err_occ = False
+
                 file_content = uploaded_file.read().decode('utf8')
                 pkgs = [item.split(' - ') for item in file_content.split('\n')]
 
@@ -202,8 +188,9 @@ def info():
                     try:
                         package = Package(
                             track_no=track_no,
-                            shipped_on=shipped_on,
-                            name=pkg_name
+                            shipped_on=parse(shipped_on, dayfirst=True),
+                            name=pkg_name,
+                            user=current_user
                         )
                         db.session.add(package)
                         db.session.flush()
@@ -213,23 +200,24 @@ def info():
                         db.session.rollback()
                         continue
                     except Exception as ex:
-                        print(ex)
-                        # flash('Error occurred while syncing data.', 'warning')
-                db.session.commit()
+                        err_occ = True
+                        db.session.rollback()
+                        flash('Error occurred while syncing data.', 'warning')
+                        break
 
-                if total:
-                    flash('Sync %s packages.' % total, 'info')
-                else:
-                    flash('There is no packages for sync.', 'info')
+                if not err_occ:
+                    db.session.commit()
+
+                    if total:
+                        flash('Sync %s packages.' % total, 'info')
+
+                        return redirect(url_for('info'))
+                    else:
+                        flash('There is no packages for sync.', 'info')
 
             except Exception as ex:
-                print(str(ex))
                 flash(
                     'Error occurred while reading file or invalid data format.', 'warning')
-
-            # filename = secure_filename(uploaded_file.filename)
-            # uploaded_file.save(os.path.join(
-            #     app.config['UPLOAD_FOLDER'], filename))
 
     return render_template('info.html',
         data=data, form=form, upload_form=upload_form)

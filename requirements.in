@@ -8,7 +8,6 @@ Flask-WTF
 Flask-Uploads
 rauth
 gunicorn
-dropbox
 xmltodict
 python-dateutil
 pipdeptree
