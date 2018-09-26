@@ -32,8 +32,8 @@
                     url: '/delete_pkgs/' + data + '/',
                     type: 'DELETE',
                     success: function(result) {
-                        // Do something with the result
-                        alert("SUCCESS DELETE");
+                        alert(result)
+                        window.location.replace("/info");
                     }
                 });
             }

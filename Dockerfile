@@ -12,7 +12,7 @@ RUN apt-get update -qq  && \
 
 # Set git aliases
 RUN git config --global alias.s status && \
-    git config --global alias.c checkout && \
+    git config --global alias.co checkout && \
     git config --global alias.b branch
 
 ARG USER=devel
