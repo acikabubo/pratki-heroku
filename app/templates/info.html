@@ -8,19 +8,36 @@
 {% block scripts %}
     {{ super() }}
     <script>
-    $('#rm_pkgs').click(function(){
-        var pkgs = [];
-        $.each($("input[name='rm_pkg']:checked"), function(){
-            pkgs.push($(this).val());
+        var $checks = $("input[type='checkbox']").change(function() {
+            var checked = $checks.is(':checked');
+            $("#rm_pkgs").toggle(checked);
         });
+        $checks.first().change();
 
-        if (pkgs.length == 0) {
-            alert('Please choose at least one value.');
-        }
-        else {
-            alert(pkgs);
-        }
-    });
+        $('#rm_pkgs').click(function(){
+            var pkgs = [];
+            $.each($("input[name='rm_pkg']:checked"), function(){
+                pkgs.push($(this).val());
+            });
+
+            if (pkgs.length == 0) {
+                alert('Please choose at least one value.');
+            }
+            else {
+                alert(pkgs);
+
+                data = JSON.stringify(pkgs);
+
+                $.ajax({
+                    url: '/delete_pkgs/' + data + '/',
+                    type: 'DELETE',
+                    success: function(result) {
+                        // Do something with the result
+                        alert("SUCCESS DELETE");
+                    }
+                });
+            }
+        });
     </script>
 {% endblock %}
 
@@ -41,7 +58,6 @@
                 </tr>
             </thead>
             <tbody>
-                <form action="{{ url_for('delete_pkgs') }}" method="POST">
             {% for item in data.packages %}
                 {% if item.notice %}
                     <tr class="table-info">
@@ -56,11 +72,10 @@
                     <td class="txt-padding">{{ item.notice }}</td>
                     <!-- <td class="txt-padding">{{ item.pkg_name }} <button type="button" style="float: right; border-radius: 12px;">Remove</button></td> -->
                     <td class="txt-padding">{{ item.pkg_name }}
-                        <input type="checkbox" style="float: right;" name="rm_pkg" value={{ item.track_no }}>
+                        <input type="checkbox" class="checkbox-info" style="float: right;" name="rm_pkg" value={{ item.track_no }}>
                     </td>
                 </tr>
             {% endfor %}
-                </form>
             </tbody>
             <tfoot>
                 <tr>
@@ -71,11 +86,12 @@
                             <font color="grey">Total: {{ data.info.total }}</font>
                         {% endif %}
                         <button type="button" class="btn btn-link" data-toggle="modal" data-target="#modalNewSync">Add New Package</button>
-                        <button type="button" id="rm_pkgs">Remove selected packages</button>
                     </td>
                 </tr>
             </tfoot>
         </table>
+        <button type="button" id="rm_pkgs" class="btn" style="float: right; border-radius: 12px;">Remove selected packages</button>
+
     </div>
     <!-- Modal: New / Sync Form -->
     <div class="modal fade" id="modalNewSync" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

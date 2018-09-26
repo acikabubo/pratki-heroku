@@ -1,3 +1,4 @@
+import json
 import requests
 import xmltodict
 from dateutil.parser import parse
@@ -310,11 +311,14 @@ def pkg_details(track_no):
     return render_template('package.html', data=data)
 
 
-@app.route('/delete_pkgs/', methods=['POST'])
+@app.route('/delete_pkgs/<pkgs>/', methods=['DELETE'])
 @login_required
-def delete_pkgs():
+def delete_pkgs(pkgs):
     print()
-    print('DELETE PACKAGES')
+    print(type(pkgs))
+    pkgs = json.loads(pkgs)
+    print(type(pkgs))
+    print(pkgs)
     print()
     return redirect(url_for('info'))
 
