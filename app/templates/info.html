@@ -5,6 +5,26 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='info.css') }}">
 {% endblock %}
 
+{% block scripts %}
+    {{ super() }}
+    <script>
+    $('#rm_pkgs').click(function(){
+        var pkgs = [];
+        $.each($("input[name='rm_pkg']:checked"), function(){
+            pkgs.push($(this).val());
+        });
+
+        if (pkgs.length == 0) {
+            alert('Please choose at least one value.');
+        }
+        else {
+            alert(pkgs);
+        }
+    });
+    </script>
+{% endblock %}
+
+
 {% block title %}Track Packages{% endblock %}
 
 {% block content %}
@@ -21,6 +41,7 @@
                 </tr>
             </thead>
             <tbody>
+                <form action="{{ url_for('delete_pkgs') }}" method="POST">
             {% for item in data.packages %}
                 {% if item.notice %}
                     <tr class="table-info">
@@ -33,16 +54,24 @@
                     <td class="num-padding" align="right">{{ item.shipped_ago }}</td>
                     <td align="center">{{ item.info_date }}</td>
                     <td class="txt-padding">{{ item.notice }}</td>
-                    <td class="txt-padding">{{ item.pkg_name }}</td>
+                    <!-- <td class="txt-padding">{{ item.pkg_name }} <button type="button" style="float: right; border-radius: 12px;">Remove</button></td> -->
+                    <td class="txt-padding">{{ item.pkg_name }}
+                        <input type="checkbox" style="float: right;" name="rm_pkg" value={{ item.track_no }}>
+                    </td>
                 </tr>
             {% endfor %}
+                </form>
             </tbody>
             <tfoot>
                 <tr>
                     <td align="center" colspan="5">
-                        <font color="grey">Total: {{ data.info.total }} / Waiting: {{ data.info.waiting }} / Arrived: {{ data.info.arrived }}</font>
-                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#modalNewSync">Add New Package
-                        </button>
+                        {% if data.info.waiting %}
+                            <font color="grey">Total: {{ data.info.total }} / Waiting: {{ data.info.waiting }} / Arrived: {{ data.info.arrived }}</font>
+                        {% else %}
+                            <font color="grey">Total: {{ data.info.total }}</font>
+                        {% endif %}
+                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#modalNewSync">Add New Package</button>
+                        <button type="button" id="rm_pkgs">Remove selected packages</button>
                     </td>
                 </tr>
             </tfoot>
