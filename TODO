@@ -1,8 +1,3 @@
-- interface for remove packages
-- uploaded file for syncing packages need to be with user id prefix
-    <user_id>_filename.txt
-- material design?
-- flask social? facebook, google
 
 # User login/logout/registraion
 https://github.com/shekhargulati/flask-login-example/blob/master/flask-login-example.py
