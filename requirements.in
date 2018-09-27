@@ -6,6 +6,7 @@ Flask-Migrate
 Flask-Bootstrap4
 Flask-WTF
 Flask-Uploads
+Flask-Assets
 rauth
 gunicorn
 xmltodict
