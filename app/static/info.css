@@ -27,3 +27,10 @@ tfoot {
 div.table-responsive {
     padding: 15px;
 }
+
+#rm_pkgs {
+    display: none;
+    float: right;
+    border-radius: 12px;
+}
+

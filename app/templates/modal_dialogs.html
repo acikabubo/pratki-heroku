@@ -1,0 +1,107 @@
+<!-- Modal: New / Sync Form -->
+<div class="modal fade" id="modalNewSync" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog cascading-modal" role="document">
+        <!-- End Content-->
+        <div class="modal-content">
+            <!--Modal cascading tabs-->
+            <div class="modal-c-tabs">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs md-tabs tabs-2 light-blue darken-3" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#panelNewPackage" role="tab">New Package</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#panelSyncPackages" role="tab">Sync Packages</a>
+                    </li>
+                </ul>
+
+                <!-- Tab panels -->
+                <div class="tab-content">
+
+                    <!-- Start New Package-->
+                    <div class="tab-pane fade in show active" id="panelNewPackage" role="tabpanel">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add New Package</h5>
+                        </div>
+
+                        <!--Body-->
+                        <div class="modal-body mb-1">
+                            <form action="" method="post" role="form">
+                                {{ form.csrf }}
+                                <div class="form-group">
+                                    {{ form.hidden_tag() }}
+                                    <br> {{ form.track_no.label }} {{ form.track_no(size=16) }}
+                                    <br> {{ form.shipped_on.label }} {{ form.shipped_on(size=20) }}
+                                    <br> {{ form.name.label }} {{ form.name(size=64) }}
+                                </div>
+
+                                <center>
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </center>
+                            </form>
+                        </div>
+
+                        <!--Footer-->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- End New Package 7-->
+
+                    <!--Start Sync Panel -->
+                    <div class="tab-pane fade" id="panelSyncPackages" role="tabpanel">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title">Choose file</h5>
+                        </div>
+
+                        <!--Body-->
+                        <div class="modal-body">
+                            <form action="" method="post" enctype="multipart/form-data" role="form">
+                                {{ form.csrf }}
+                                <div class="form-group">
+                                    {{ form.hidden_tag() }} {{ upload_form.file }}
+                                </div>
+
+                                <center>
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </center>
+                            </form>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- End Sync Panel -->
+                </div>
+
+            </div>
+        </div>
+        <!-- End Content -->
+    </div>
+</div>
+<!-- End Modal -->
+
+<!-- Modal dialog for confimation to remove selected packages -->
+<div id="modalConfirm" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to remove selected packages?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" id="confirmed" class="btn btn-primary">Yes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
