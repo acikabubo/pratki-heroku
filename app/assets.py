@@ -11,6 +11,7 @@ bundles = {
         'css/index.css',
         'css/info.css',
         'css/package.css',
+        'css/android.css',
         output='gen/main.css'),
 
     'img': Bundle(

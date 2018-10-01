@@ -61,122 +61,86 @@ def info():
 
     packages = []
     waiting, arrived = 0, 0
-    # for item in pkgs:
-    #     track_no = item.track_no
-    #     pkg_date = item.shipped_on
-    #     pkg_name = item.name
-    #     send_date = datetime.combine(pkg_date, datetime.min.time())
-    #     shipped_ago = (datetime.now() - send_date).days
+    for item in pkgs:
+        track_no = item.track_no
+        pkg_date = item.shipped_on
+        pkg_name = item.name
+        send_date = datetime.combine(pkg_date, datetime.min.time())
+        shipped_ago = (datetime.now() - send_date).days
 
-    #     if len(track_no) != 13:
-    #         waiting += 1
-    #         packages.append({
-    #             'track_no': track_no,
-    #             'shipped_ago': shipped_ago,
-    #             'info_date': "",
-    #             'notice': "",
-    #             'pkg_name': pkg_name
-    #         })
-    #         continue
+        if len(track_no) != 13:
+            waiting += 1
+            packages.append({
+                'track_no': track_no,
+                'shipped_ago': shipped_ago,
+                'info_date': "",
+                'notice': "",
+                'pkg_name': pkg_name
+            })
+            continue
 
-    #     r = requests.get(
-    #         'http://www.posta.com.mk/tnt/api/query?id=%s' % track_no)
+        r = requests.get(
+            'http://www.posta.com.mk/tnt/api/query?id=%s' % track_no)
 
-    #     try:
-    #         # Convert xml data to dict
-    #         req_data = xmltodict.parse(r.text)
-    #     except Exception as ex:
-    #         print("Error occurred while parsing xml data: %s" % str(ex))
-    #         continue
+        try:
+            # Convert xml data to dict
+            req_data = xmltodict.parse(r.text)
+        except Exception as ex:
+            print("Error occurred while parsing xml data: %s" % str(ex))
+            continue
 
-    #     # Get required data
-    #     array_of_tracking_data = req_data['ArrayOfTrackingData']
+        # Get required data
+        array_of_tracking_data = req_data['ArrayOfTrackingData']
 
-    #     # Check if there is no package data
-    #     # and add in table without Info/Data & Notice
-    #     if not array_of_tracking_data:
-    #         waiting += 1
-    #         packages.append({
-    #             'track_no': track_no,
-    #             'shipped_ago': shipped_ago,
-    #             'info_date': "",
-    #             'notice': "",
-    #             'pkg_name': pkg_name
-    #         })
-    #         continue
+        # Check if there is no package data
+        # and add in table without Info/Data & Notice
+        if not array_of_tracking_data:
+            waiting += 1
+            packages.append({
+                'track_no': track_no,
+                'shipped_ago': shipped_ago,
+                'info_date': "",
+                'notice': "",
+                'pkg_name': pkg_name
+            })
+            continue
 
-    #     # Get tracking data per package
-    #     tracking_data = array_of_tracking_data['TrackingData']
+        # Get tracking data per package
+        tracking_data = array_of_tracking_data['TrackingData']
 
-    #     # Get latest tracking data pre package
-    #     try:
-    #         # Tracking data it's a list when there is multiple items
-    #         # Get only the latest item/status
-    #         package = list(tracking_data[-1].items())
-    #     except KeyError:
-    #         # Tracking data it's not a list when there is only one item
-    #         package = list(tracking_data.items())
+        # Get latest tracking data pre package
+        try:
+            # Tracking data it's a list when there is multiple items
+            # Get only the latest item/status
+            package = list(tracking_data[-1].items())
+        except KeyError:
+            # Tracking data it's not a list when there is only one item
+            package = list(tracking_data.items())
 
-    #     # Get datetime format, if there is midnight get only date
-    #     dt_format = '%d.%m.%Y'
-    #     pkg_date = parse(package[3][1])
-    #     if pkg_date.time() != time(0, 0):
-    #         dt_format = '%d.%m.%Y %H:%M:%S'
+        # Get datetime format, if there is midnight get only date
+        dt_format = '%d.%m.%Y'
+        pkg_date = parse(package[3][1])
+        if pkg_date.time() != time(0, 0):
+            dt_format = '%d.%m.%Y %H:%M:%S'
 
-    #     # Get data from post office
-    #     pkg_date = parse(package[3][1]).strftime(dt_format)
-    #     pkg_notice = package[4][1]
+        # Get data from post office
+        pkg_date = parse(package[3][1]).strftime(dt_format)
+        pkg_notice = package[4][1]
 
-    #     arrived += 1
-    #     packages.append({
-    #         'track_no': track_no,
-    #         'shipped_ago': shipped_ago,
-    #         'info_date': pkg_date,
-    #         'notice': pkg_notice,
-    #         'pkg_name': pkg_name
-    #     })
+        arrived += 1
+        packages.append({
+            'track_no': track_no,
+            'shipped_ago': shipped_ago,
+            'info_date': pkg_date,
+            'notice': pkg_notice,
+            'pkg_name': pkg_name
+        })
 
-    # # Sort by shipped ago
-    # packages = sorted(packages, key=lambda k: k['shipped_ago'])
+    # Sort by shipped ago
+    packages = sorted(packages, key=lambda k: k['shipped_ago'])
 
-    packages = [{'info_date': '',
-                'notice': '',
-                'pkg_name': 'Large 830 breadboards x 2',
-                'shipped_ago': 14,
-                'track_no': 'UN039457012CN'},
-            {'info_date': '',
-                'notice': '',
-                'pkg_name': '5 Colors mini breadboards',
-                'shipped_ago': 14,
-                'track_no': 'UN036339714CN'},
-            {'info_date': '',
-                'notice': '',
-                'pkg_name': 'Mini breadboards x 2',
-                'shipped_ago': 15,
-                'track_no': 'LP00105168891208'},
-            {'info_date': '',
-                'notice': '',
-                'pkg_name': 'Bandana',
-                'shipped_ago': 24,
-                'track_no': 'UC999996946CN'},
-            {'info_date': '',
-                'notice': '',
-                'pkg_name': '10Pcs 4 channel IIC I2C LLC',
-                'shipped_ago': 26,
-                'track_no': 'UC994073043CN'},
-            {'info_date': '',
-                'notice': '',
-                'pkg_name': 'Axis Gyro and Accelerometer Module',
-                'shipped_ago': 27,
-                'track_no': 'UC988205712CN'},
-            {'info_date': '',
-                'notice': '',
-                'pkg_name': 'DS3231 AT24C32 IIC Module Precision Clock Module',
-                'shipped_ago': 28,
-                'track_no': 'UC987371112CN'}]
-
-    # Return raw json data
-    if request.is_json:
+    # Return raw json data (for android app)
+    if request.user_agent.platform == 'android' and request.is_json:
         return jsonify(packages)
 
     # Make final data
@@ -304,9 +268,8 @@ def pkg_details(track_no):
             'notice': row[4][1]
         })
 
-    # Return raw json data
-    if request.is_json:
-        return jsonify(data)
+    if request.user_agent.platform == 'android':
+        return render_template('android.html', data=data)
 
     return render_template('package.html', data=data)
 
@@ -315,17 +278,17 @@ def pkg_details(track_no):
 @login_required
 def delete_pkgs(pkgs):
     pkgs = json.loads(pkgs)
-    
+
     try:
         db.session.query(Package).filter(
-            Package.user_id==current_user.id,
+            Package.user_id == current_user.id,
             Package.track_no.in_(pkgs)
         ).delete(synchronize_session='fetch')
 
         db.session.commit()
         return "OK"
-    
-    except Exception as ex:
+
+    except Exception:
         db.session.rollback()
 
 

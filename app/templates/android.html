@@ -1,0 +1,34 @@
+{% block styles %}
+    {% assets "css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
+    {% assets "img" %}
+        <link rel="shortcut icon" href="{{ ASSET_URL }}" />
+    {% endassets %}
+{% endblock %}
+
+{% block content %}
+    <head>
+        <title>Package info</title>
+    </head>
+    <h3 align="center"></h3>
+    <table align="center" border="1" bordercolor="#DFDCDB">
+        <tr>
+            <th class="title-padding" colspan="4"><h3>{{ data.track_no }} - {{ data.item_name }}<h3></th>
+        </tr>
+        <tr>
+            <th width="200px">From</th>
+            <th width="80px">To</th>
+            <th width="120px">Date</th>
+            <th width="150px">Notice</th>
+        </tr>
+        {% for item in data.fnl %}
+            <tr>
+               <td>{{ item.from }}</td>
+                <td>{{ item.to }}</td>
+                <td>{{ item.date }}</td>
+                <td>{{ item.notice }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
