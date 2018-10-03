@@ -52,7 +52,6 @@ def oauth_callback(provider):
     return redirect(url_for('info'))
 
 
-# TODO: This route should be /info
 @app.route('/info', methods=('GET', 'POST'))
 @login_required
 def info():
