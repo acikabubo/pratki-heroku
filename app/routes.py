@@ -52,7 +52,6 @@ def oauth_callback(provider):
     return redirect(url_for('info'))
 
 
-# TODO: This route should be /info
 @app.route('/info', methods=('GET', 'POST'))
 @login_required
 def info():
@@ -292,5 +291,6 @@ def delete_pkgs(pkgs):
         db.session.rollback()
 
 
-if __name__ == '__main__':
-    app.run(debug=True, use_reloader=True)
+# if __name__ == '__main__':
+#     context = ('server.crt', 'server.key')
+#     app.run(debug=True, use_reloader=True, ssl_context=context)
