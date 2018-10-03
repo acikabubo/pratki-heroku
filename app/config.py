@@ -2,8 +2,6 @@ import os
 
 
 class Config(object):
-    SERVER_NAME = 'pratki.herokuapp.com'
-
     TEMPLATES_AUTO_RELOAD = True
 
     SECRET_KEY = "powerful secretkey"

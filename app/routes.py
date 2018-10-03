@@ -10,6 +10,8 @@ from .models import User, Package
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, logout_user, current_user, login_required
 from .oauth import OAuthSignIn
+from OpenSSL import SSL
+
 
 
 @app.route('/')
@@ -292,4 +294,8 @@ def delete_pkgs(pkgs):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=True)
+    context = SSL.Context(SSL.SSLv23_METHOD)
+    context.use_privatekey_file('key.pem')
+    context.use_certificate_file('cert.pem')
+
+    app.run(use_reloader=True, ssl_context=context)
