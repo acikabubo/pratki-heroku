@@ -10,7 +10,7 @@ docker build --force-rm -t pratki-heroku \
     --build-arg UID=`id -u $USER` \
     --build-arg GID=`id -g $GROUP` \
     $SRC
-    
+
 docker create --rm -it \
     --name pratki-heroku \
     -v $SRC:/pratki-heroku \
@@ -21,20 +21,20 @@ docker create --rm -it \
 
 docker run \
     --name pratki-nginx \
-    -v $SRC/nginx/nginx.conf:/etc/nginx/conf.d/default.conf \
-    --network pratki-net \
     -p 80:80 \
-    nginx:stable-alpine
+    --network pratki-net \
+    -v $SRC/nginx/nginx.conf:/etc/nginx/conf.d/default.conf \
+    -d nginx:stable-alpine sh -c "while true; do nginx -g 'daemon off;'; sleep 1; done"
 
 docker start -a -i pratki-heroku
+
+docker rm -f pratki-nginx
 
 DANGLING=$(docker images -f "dangling=true" -q)
 if [ "x""$DANGLING" != "x" ]; then
     docker rmi $DANGLING
 fi
 docker volume ls -qf dangling=true | xargs -r docker volume rm
-
-docker rm -f pratki-nginx
 
 echo "Successfuly destroyed all containers"
 exit 0
