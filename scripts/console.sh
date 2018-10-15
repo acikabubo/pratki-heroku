@@ -22,8 +22,11 @@ docker create --rm -it \
 docker run \
     --name pratki-nginx \
     -p 80:80 \
+    -p 443:443 \
     --network pratki-net \
     -v $SRC/nginx/nginx.conf:/etc/nginx/conf.d/default.conf \
+    -v $SRC/nginx/ssl/pratki-heroku.crt:/etc/nginx/pratki-heroku.crt \
+    -v $SRC/nginx/ssl/pratki-heroku.key:/etc/nginx/pratki-heroku.key \
     -d nginx:stable-alpine sh -c "while true; do nginx -g 'daemon off;'; sleep 1; done"
 
 docker start -a -i pratki-heroku
