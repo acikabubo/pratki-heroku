@@ -291,6 +291,5 @@ def delete_pkgs(pkgs):
         db.session.rollback()
 
 
-# if __name__ == '__main__':
-#     context = ('server.crt', 'server.key')
-#     app.run(debug=True, use_reloader=True, ssl_context=context)
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=True)
