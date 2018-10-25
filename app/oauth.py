@@ -74,36 +74,43 @@ class FacebookSignIn(OAuthSignIn):
         )
 
 
-class TwitterSignIn(OAuthSignIn):
+class GoogleSignIn(OAuthSignIn):
     def __init__(self):
-        super(TwitterSignIn, self).__init__('twitter')
+        print()
+        print('GOOGLE AUTH')
+        print()
+        super(GoogleSignIn, self).__init__('google')
         self.service = OAuth1Service(
-            name='twitter',
-            consumer_key=self.consumer_id,
-            consumer_secret=self.consumer_secret,
-            request_token_url='https://api.twitter.com/oauth/request_token',
-            authorize_url='https://api.twitter.com/oauth/authorize',
-            access_token_url='https://api.twitter.com/oauth/access_token',
-            base_url='https://api.twitter.com/1.1/'
+            name='google',
+            client_id=self.consumer_id,
+            client_secret=self.consumer_secret,
+            authorize_url='https://accounts.google.com/o/oauth2/v2/auth'
         )
 
     def authorize(self):
-        request_token = self.service.get_request_token(
-            params={'oauth_callback': self.get_callback_url()}
+        return redirect(self.service.get_authorize_url(
+            scope='https://www.googleapis.com/auth/drive.metadata.readonly',
+            response_type='code',
+            redirect_uri=self.get_callback_url())
         )
-        session['request_token'] = request_token
-        return redirect(self.service.get_authorize_url(request_token[0]))
 
     def callback(self):
-        request_token = session.pop('request_token')
-        if 'oauth_verifier' not in request.args:
+        def decode_json(payload):
+            return json.loads(payload.decode('utf-8'))
+
+        if 'code' not in request.args:
             return None, None, None
         oauth_session = self.service.get_auth_session(
-            request_token[0],
-            request_token[1],
-            data={'oauth_verifier': request.args['oauth_verifier']}
+            data={'code': request.args['code'],
+                  'grant_type': 'authorization_code',
+                  'redirect_uri': self.get_callback_url()},
+            decoder=decode_json
         )
-        me = oauth_session.get('account/verify_credentials.json').json()
-        social_id = 'twitter$' + str(me.get('id'))
-        username = me.get('screen_name')
-        return social_id, username, None   # Twitter does not provide email
+        me = oauth_session.get('me?fields=id,email').json()
+        return (
+            'facebook$' + me['id'],
+            me.get('email').split('@')[0],  # Facebook does not provide
+                                            # username, so the email's user
+                                            # is used instead
+            me.get('email')
+        )

@@ -20,8 +20,8 @@ class Config(object):
             'id': '1982853558673321',  # pratki facebook app
             'secret': 'ea3bb54866a4bc6667a78cabca0034be'  # pratki facebook app
         },
-        'twitter': {
-            'id': '3RzWQclolxWZIMq5LJqzRZPTl',
-            'secret': 'm9TEd58DSEtRrZHpz2EjrV9AhsBRxKMo8m3kuIZj3zLwzwIimt'
+        'google': {
+            'id': '1073788361141-872fbem3o8mr9ol71730ltoppb21ansq.apps.googleusercontent.com',  # pratki google app
+            'secret': 'Qy012SanPwRfj7oFCCj1UtAI'  # pratki google app
         }
     }
