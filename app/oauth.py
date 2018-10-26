@@ -88,7 +88,7 @@ class GoogleSignIn(OAuthSignIn):
 
     def authorize(self):
         return redirect(self.service.get_authorize_url(
-            scope='email',
+            scope='email profile',
             response_type='code',
             redirect_uri=self.get_callback_url())
         )
@@ -99,18 +99,25 @@ class GoogleSignIn(OAuthSignIn):
 
         if 'code' not in request.args:
             return None, None, None, None
-        oauth_session = self.service.get_auth_session(
-            data={'code': request.args['code'],
-                  'grant_type': 'authorization_code',
-                  'redirect_uri': self.get_callback_url()},
-            decoder=decode_json
-        )
-        me = oauth_session.get('https://www.googleapis.com/oauth2/v1/userinfo').json()
+
+        data = {
+            'code': request.args['code'],
+            'grant_type': 'authorization_code',
+            'redirect_uri': self.get_callback_url()
+        }
+
+        response = self.service.get_raw_access_token(data=data).json()
+        
+        oauth2_session = self.service.get_session(response['access_token'])
+        me = oauth2_session.get('https://www.googleapis.com/oauth2/v1/userinfo').json()
+
+        response = self.service.get_raw_access_token(data=data).json()
+        oauth2_session = self.service.get_session(response['access_token'])
+
+        me = oauth2_session.get('https://www.googleapis.com/oauth2/v1/userinfo').json()
 
         return (
             'google$' + me['id'],
-            me.get('email').split('@')[0],  # Facebook does not provide
-                                            # username, so the email's user
-                                            # is used instead
+            me.get('email').split('@')[0], 
             str(me)
         )
