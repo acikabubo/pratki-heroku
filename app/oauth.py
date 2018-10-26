@@ -83,7 +83,6 @@ class GoogleSignIn(OAuthSignIn):
             client_secret=self.consumer_secret,
             authorize_url='https://accounts.google.com/o/oauth2/v2/auth',
             access_token_url=None,
-            access_token_method='POST',
             base_url='https://www.google.com/accounts/'
         )
 
