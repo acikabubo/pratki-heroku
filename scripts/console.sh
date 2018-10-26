@@ -27,6 +27,7 @@ docker run \
     -v $SRC/nginx/nginx.conf:/etc/nginx/conf.d/default.conf \
     -v $SRC/nginx/ssl/pratki-heroku.crt:/etc/nginx/pratki-heroku.crt \
     -v $SRC/nginx/ssl/pratki-heroku.key:/etc/nginx/pratki-heroku.key \
+    -v $SRC/nginx/html/502.html:/usr/share/nginx/html/502.html \
     -d nginx:stable-alpine sh -c "while true; do nginx -g 'daemon off;'; sleep 1; done"
 
 docker start -a -i pratki-heroku
