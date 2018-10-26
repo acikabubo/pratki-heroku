@@ -88,20 +88,17 @@ class GoogleSignIn(OAuthSignIn):
 
     def authorize(self):
         return redirect(self.service.get_authorize_url(
-            scope='email profile',
+            scope='email',
             response_type='code',
             redirect_uri=self.get_callback_url())
         )
 
     def callback(self):
-        print()
-        print(__name__)
-        print()
         def decode_json(payload):
             return json.loads(payload.decode('utf-8'))
 
         if 'code' not in request.args:
-            return None, None, None,
+            return None, None, None, None
         oauth_session = self.service.get_auth_session(
             data={'code': request.args['code'],
                   'grant_type': 'authorization_code',
