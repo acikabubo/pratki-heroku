@@ -110,5 +110,5 @@ class GoogleSignIn(OAuthSignIn):
         return (
             'google$' + me['id'],
             me.get('email').split('@')[0],
-            str(me)
+            me.get('email')
         )
