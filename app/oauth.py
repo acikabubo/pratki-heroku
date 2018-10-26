@@ -82,7 +82,7 @@ class GoogleSignIn(OAuthSignIn):
             client_id=self.consumer_id,
             client_secret=self.consumer_secret,
             authorize_url='https://accounts.google.com/o/oauth2/v2/auth',
-            access_token_url=None,
+            access_token_url='https://www.googleapis.com/oauth2/v4/token',
             base_url='https://www.google.com/accounts/'
         )
 
