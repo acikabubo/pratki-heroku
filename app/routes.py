@@ -5,7 +5,7 @@ from dateutil.parser import parse
 from datetime import datetime, time
 from app import app, db
 from flask import request, jsonify, render_template, redirect, flash, url_for
-from .forms import PackageForm, UploadForm
+from .forms import RegistrationForm, LoginForm, PackageForm, UploadForm
 from .models import User, Package
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, logout_user, current_user, login_required
@@ -17,8 +17,45 @@ def index():
     if current_user.is_authenticated:
         return redirect(url_for('info'))
 
-    return render_template('index.html')
+    return render_template('index.html', 
+        l_form=LoginForm(), r_form=RegistrationForm())
 
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+    
+    # TODO: Check this code
+    # return render_template('register.html', title='Register', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('info'))
+
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+    
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+    
+        login_user(user, remember=form.remember_me.data)
+        return redirect(url_for('info'))
+
+    # TODO: Check this code
+    # return render_template('login.html', title='Sign In', form=form)
 
 @app.route('/logout')
 def logout():

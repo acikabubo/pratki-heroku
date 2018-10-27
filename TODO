@@ -17,8 +17,9 @@ https://flask-assets.readthedocs.io/en/latest/
 
 1. Set env vars for facebook/google app id & pass
 2. make tmp api/path for android app (temporary not use authentication)
-3. google auth
-4. merge facebook * google auth
+3. create user and then link with facebook and google
+4. Login/Register put in modal dialogs
 
 CHECK THIS
 https://github.com/pdybka-ep/merging-oauth-multiple-accounts/blob/master/oauth_login.py
+

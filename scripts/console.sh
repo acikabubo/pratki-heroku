@@ -1,9 +1,14 @@
 #!/bin/bash
 
+# Scripts path
 IMIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SRC="$(dirname "$IMIN")"
 
 docker network create pratki-net
+
+docker run --name pratki-db --network=pratki-net \
+    -v $SRC/pg/data:/var/lib/postgresql/data -p 6543:5432 \
+    -e POSTGRES_PASSWORD=postgres -d postgres:11-alpine -c fsync=off
 
 docker build --force-rm -t pratki-heroku \
     --build-arg USER=$USER \
@@ -17,6 +22,7 @@ docker create --rm -it \
     --hostname server \
     --network pratki-net \
     -p 5000:5000 \
+    -e DATABASE_URL='postgresql://postgres:postgres@pratki-db:5432/pratki' \
     pratki-heroku tmux new -s server bash
 
 docker run \
@@ -33,6 +39,7 @@ docker run \
 docker start -a -i pratki-heroku
 
 docker rm -f pratki-nginx
+docker rm -f pratki-db
 
 DANGLING=$(docker images -f "dangling=true" -q)
 if [ "x""$DANGLING" != "x" ]; then

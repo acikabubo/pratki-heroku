@@ -1,11 +1,41 @@
 from flask_wtf import FlaskForm
-from wtforms import TextField, DateField
-from wtforms.validators import DataRequired, Length
+from wtforms import (StringField, PasswordField, BooleanField, TextField, 
+    DateField, SubmitField)
+from wtforms.validators import (DataRequired, Length, ValidationError, 
+    Email, EqualTo)
 from flask_uploads import UploadSet, TEXT
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from datetime import date, timedelta
+from .models import User
+
 
 txt = UploadSet('txts', TEXT)
+
+
+class RegistrationForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField(
+        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Register')
+
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user is not None:
+            raise ValidationError('Please use a different username.')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is not None:
+            raise ValidationError('Please use a different email address.')
+
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField('Remember Me')
+    submit = SubmitField('Sign In')
 
 
 class UploadForm(FlaskForm):

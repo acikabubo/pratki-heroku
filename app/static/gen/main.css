@@ -90,6 +90,15 @@ body { padding: 2em; }
     background: #E74B37;
 }
 
+/* Common Login */
+.loginBtn-common {
+    color: white;
+    background-color: #F49626;
+}
+.loginBtn-common:focus {
+    background-color: #5B7BD5;
+    background-image: linear-gradient(#5B7BD5, #4864B1);
+}
 th {
     border: 1px solid black;
     background-color: lightgreen;
