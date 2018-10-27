@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if current_user.is_authenticated %}
+        <p class="username">
+            <strong>{{ current_user.username }}</strong>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </p>
+    {% endif %}
+
+    <a href="{{ url_for('info') }}">Go back</a>
+
+    <div class="container">
+        <center>
+            <div class="col-sm-2 center-div">
+                {% for item in data.linked %}
+                    <a class="btn btn-block loginBtn loginBtn-{{ item }}"
+                        href="{{ url_for('unlink', provider=item) }}">
+                            Unlink {{ item|title }}
+                    </a>
+                {% endfor %}
+                {% for item in data.unlinked %}
+                    <a class="btn btn-block loginBtn loginBtn-{{ item }}"
+                        href="{{ url_for('oauth_authorize', provider=item) }}">
+                            Login with {{ item|title }}
+                    </a>
+                {% endfor %}
+            </div>
+        </center>
+    </div>
+{% endblock %}
