@@ -62,8 +62,8 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/authorize/<provider>')
-def oauth_authorize(provider):
+@app.route('/authorize/<provider>/<first_login>')
+def oauth_authorize(providerm, first_login):
     if not current_user.is_anonymous:
         return redirect(url_for('info'))
     oauth = OAuthSignIn.get_provider(provider)
