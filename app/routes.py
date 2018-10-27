@@ -70,8 +70,8 @@ def oauth_authorize(provider):
     return oauth.authorize()
 
 
-@app.route('/callback/<provider>')
-def oauth_callback(provider):
+@app.route('/callback/<provider>/<first_login>')
+def oauth_callback(provider, first_login):
     if not current_user.is_anonymous:
         return redirect(url_for('index'))
 
@@ -82,7 +82,7 @@ def oauth_callback(provider):
         return redirect(url_for('index'))
 
     ext_login = ExternalLogin.query.filter_by(social_id=social_id).first()
-    if not ext_login:
+    if not ext_login and first_login:
         ext_login = ExternalLogin(
             provider=provider,
             social_id=social_id, 
