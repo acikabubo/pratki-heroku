@@ -75,7 +75,7 @@ def oauth_callback(provider, first_login):
     if not current_user.is_anonymous:
         return redirect(url_for('index'))
 
-    oauth = OAuthSignIn.get_provider(provider)
+    oauth = OAuthSignIn.get_provider(provider, first_login)
     social_id, username, email = oauth.callback()
     if social_id is None:
         flash('Authentication failed.')
