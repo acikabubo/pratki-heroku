@@ -19,6 +19,7 @@ https://flask-assets.readthedocs.io/en/latest/
 2. make tmp api/path for android app (temporary not use authentication)
 3. create user and then link with facebook and google
 4. Login/Register put in modal dialogs
+5. Confirm dialog for unlink auth provider
 
 CHECK THIS
 https://github.com/pdybka-ep/merging-oauth-multiple-accounts/blob/master/oauth_login.py

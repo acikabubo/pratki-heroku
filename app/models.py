@@ -4,7 +4,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class ExternalLogin(db.Model):
+    __table_args__ = (
+        db.UniqueConstraint('provider', 'user_id', 
+            name='unique_provider_user_id'),
+    )
+
     id = db.Column(db.Integer, primary_key=True)
+    provider = db.Column(db.String(15), nullable=False)
     social_id = db.Column(db.String(64), nullable=False, unique=True)
     nickname = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=True)

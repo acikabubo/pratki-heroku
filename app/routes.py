@@ -45,7 +45,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-    
+
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
@@ -84,6 +84,7 @@ def oauth_callback(provider):
     ext_login = ExternalLogin.query.filter_by(social_id=social_id).first()
     if not ext_login:
         ext_login = ExternalLogin(
+            provider=provider,
             social_id=social_id, 
             nickname=username, 
             email=email,
@@ -95,6 +96,40 @@ def oauth_callback(provider):
     login_user(ext_login.user, True)
 
     return redirect(url_for('info'))
+
+
+@app.route('/unlink/<provider>')
+@login_required
+def unlink(provider):
+    ext_login = ExternalLogin.query.filter_by(
+        provider=provider, user=current_user).first()
+
+    db.session.delete(ext_login)
+    db.session.commit()
+
+    return redirect(url_for('logout'))
+
+
+@app.route('/profile')
+@login_required
+def profile():
+    ext_auths = app.config['OAUTH_CREDENTIALS'].keys()
+
+    used_ext_auths = {item: False for item in ext_auths}
+
+    data = {'linked': []}
+
+    for item in current_user.ext_logins:
+        ext_auth, _ = item.social_id.split('$')
+
+        if ext_auth in ext_auths:
+            data['linked'].append(ext_auth)
+
+        used_ext_auths[ext_auth] = True
+
+    data['unlinked'] = list(set(ext_auths) - set(data['linked']))
+
+    return render_template('profile.html', data=data)
 
 
 @app.route('/info', methods=('GET', 'POST'))
