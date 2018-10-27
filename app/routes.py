@@ -6,7 +6,7 @@ from datetime import datetime, time
 from app import app, db
 from flask import request, jsonify, render_template, redirect, flash, url_for
 from .forms import RegistrationForm, LoginForm, PackageForm, UploadForm
-from .models import User, Package
+from .models import User, Package, ExternalLogin
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, logout_user, current_user, login_required
 from .oauth import OAuthSignIn
@@ -73,19 +73,28 @@ def oauth_authorize(provider):
 
 @app.route('/callback/<provider>')
 def oauth_callback(provider):
-    if not current_user.is_anonymous:
+    if not current_user.is_authenticated():
         return redirect(url_for('index'))
+
     oauth = OAuthSignIn.get_provider(provider)
     social_id, username, email = oauth.callback()
     if social_id is None:
         flash('Authentication failed.')
         return redirect(url_for('index'))
-    user = User.query.filter_by(social_id=social_id).first()
-    if not user:
-        user = User(social_id=social_id, nickname=username, email=email)
-        db.session.add(user)
+
+    ext_login = ExternalLogin.query.filter_by(social_id=social_id).first()
+    if not ext_login:
+        ext_login = ExternalLogin(
+            social_id=social_id, 
+            nickname=username, 
+            email=email,
+            user=current_user
+        )
+        db.session.add(ext_login)
         db.session.commit()
-    login_user(user, True)
+
+    login_user(ext_login.user, True)
+
     return redirect(url_for('info'))
 
 
