@@ -26,7 +26,8 @@ class OAuthSignIn(object):
             _external=True)
 
     @classmethod
-    def get_provider(self, provider_name):
+    def get_provider(self, provider_name, first_login):
+        self.first_login = first_login
         if self.providers is None:
             self.providers = {}
             for provider_class in self.__subclasses__():
