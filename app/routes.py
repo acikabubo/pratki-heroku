@@ -73,7 +73,7 @@ def oauth_authorize(provider):
 @app.route('/callback/<provider>')
 def oauth_callback(provider):
     if not current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('info'))
 
     oauth = OAuthSignIn.get_provider(provider)
     social_id, username, email = oauth.callback()
