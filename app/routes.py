@@ -96,8 +96,13 @@ def oauth_callback(provider, link):
 
         return redirect(url_for('profile'))
 
-    login_user(ext_login.user, True)
-    return redirect(url_for('info'))
+    # FIXME: This code should refactor
+    try:
+        login_user(ext_login.user, True)
+        return redirect(url_for('info'))
+    except AttributeError:
+        flash('You need to create regular account')
+        return redirect(url_for('index'))
 
 
 @app.route('/unlink/<provider>')
