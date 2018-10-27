@@ -7,12 +7,11 @@ from flask import current_app, url_for, request, redirect, session
 class OAuthSignIn(object):
     providers = None
 
-    def __init__(self, provider_name, first_login):
+    def __init__(self, provider_name):
         self.provider_name = provider_name
         credentials = current_app.config['OAUTH_CREDENTIALS'][provider_name]
         self.consumer_id = credentials['id']
         self.consumer_secret = credentials['secret']
-        self.first_login = first_login
 
     def authorize(self):
         pass
@@ -22,12 +21,10 @@ class OAuthSignIn(object):
 
     def get_callback_url(self):
         return url_for('oauth_callback', 
-            provider=self.provider_name, first_login=self.first_login,
-            _external=True)
+            provider=self.provider_name, _external=True)
 
     @classmethod
-    def get_provider(self, provider_name, first_login):
-        self.first_login = first_login
+    def get_provider(self, provider_name):
         if self.providers is None:
             self.providers = {}
             for provider_class in self.__subclasses__():

@@ -62,27 +62,27 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/authorize/<provider>/<first_login>')
-def oauth_authorize(provider, first_login):
+@app.route('/authorize/<provider>')
+def oauth_authorize(provider):
     if not current_user.is_anonymous:
         return redirect(url_for('info'))
-    oauth = OAuthSignIn.get_provider(provider, first_login)
+    oauth = OAuthSignIn.get_provider(provider)
     return oauth.authorize()
 
 
-@app.route('/callback/<provider>/<first_login>')
-def oauth_callback(provider, first_login):
+@app.route('/callback/<provider>')
+def oauth_callback(provider):
     if not current_user.is_anonymous:
         return redirect(url_for('index'))
 
-    oauth = OAuthSignIn.get_provider(provider, first_login)
+    oauth = OAuthSignIn.get_provider(provider)
     social_id, username, email = oauth.callback()
     if social_id is None:
         flash('Authentication failed.')
         return redirect(url_for('index'))
 
     ext_login = ExternalLogin.query.filter_by(social_id=social_id).first()
-    if not ext_login and first_login:
+    if not ext_login and current_user.is_authenticated:
         ext_login = ExternalLogin(
             provider=provider,
             social_id=social_id, 
