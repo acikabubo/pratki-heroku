@@ -62,7 +62,7 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/authorize/<provider>/<link>')
+@app.route('/authorize/<provider>/<int:link>')
 def oauth_authorize(provider, link):
     if not link and not current_user.is_anonymous:
         return redirect(url_for('info'))
@@ -71,7 +71,7 @@ def oauth_authorize(provider, link):
     return oauth.authorize()
 
 
-@app.route('/callback/<provider>/<link>')
+@app.route('/callback/<provider>/<int:link>')
 def oauth_callback(provider, link):
     if not link and not current_user.is_anonymous:
         return redirect(url_for('index'))
