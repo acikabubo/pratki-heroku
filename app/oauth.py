@@ -38,7 +38,7 @@ class OAuthSignIn(object):
 
 class FacebookSignIn(OAuthSignIn):
     def __init__(self):
-        super(FacebookSignIn, self).__init__('facebook')
+        super(FacebookSignIn, self).__init__('facebook' False)
         self.service = OAuth2Service(
             name='facebook',
             client_id=self.consumer_id,
@@ -79,7 +79,7 @@ class FacebookSignIn(OAuthSignIn):
 
 class GoogleSignIn(OAuthSignIn):
     def __init__(self):
-        super(GoogleSignIn, self).__init__('google')
+        super(GoogleSignIn, self).__init__('google', False)
         self.service = OAuth2Service(
             name='google',
             client_id=self.consumer_id,
