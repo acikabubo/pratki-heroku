@@ -33,9 +33,8 @@ def register():
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
-    
-    # TODO: Check this code
-    return render_template('register.html', title='Register', form=form)
+
+    return redirect(url_for('index'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -54,8 +53,8 @@ def login():
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('info'))
 
-    # TODO: Check this code
-    return render_template('login.html', title='Sign In', form=form)
+    return redirect(url_for('index'))
+
 
 @app.route('/logout')
 def logout():
