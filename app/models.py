@@ -33,7 +33,7 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         """Repr."""
-        return '<User {0}. {1}>'. format(self.id, self.nickname)
+        return '<User {0}. {1}>'. format(self.id, self.username)
 
 
 @lm.user_loader

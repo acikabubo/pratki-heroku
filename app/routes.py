@@ -82,7 +82,7 @@ def oauth_callback(provider):
         return redirect(url_for('index'))
 
     ext_login = ExternalLogin.query.filter_by(social_id=social_id).first()
-    if not ext_login:
+    if not ext_login and current_user.is_authenticated:
         ext_login = ExternalLogin(
             provider=provider,
             social_id=social_id, 
@@ -93,8 +93,10 @@ def oauth_callback(provider):
         db.session.add(ext_login)
         db.session.commit()
 
-    login_user(ext_login.user, True)
+        logout_user()
+        return redirect(url_for('index'))
 
+    login_user(ext_login.user, True)
     return redirect(url_for('info'))
 
 
