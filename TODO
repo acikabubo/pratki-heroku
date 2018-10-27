@@ -7,6 +7,7 @@ https://pythonprogramming.net/flask-registration-tutorial/?completed=/flask-user
 # facebook & twitter login
 https://blog.miguelgrinberg.com/post/oauth-authentication-with-flask
 https://github.com/miguelgrinberg/flask-oauth-example
+https://github.com/pdybka-ep/merging-oauth-multiple-accounts/blob/master/oauth_login.py
 
 - reorganized app and try to use blueprints
 - try to change shipped-on date format
@@ -17,9 +18,4 @@ https://flask-assets.readthedocs.io/en/latest/
 
 1. Set env vars for facebook/google app id & pass
 2. make tmp api/path for android app (temporary not use authentication)
-3. create user and then link with facebook and google
-4. Login/Register put in modal dialogs
-5. Confirm dialog for unlink auth provider
-
-CHECK THIS
-https://github.com/pdybka-ep/merging-oauth-multiple-accounts/blob/master/oauth_login.py
+3. Confirm dialog for unlink auth provider

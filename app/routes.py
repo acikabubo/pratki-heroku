@@ -109,6 +109,8 @@ def unlink(provider):
     db.session.delete(ext_login)
     db.session.commit()
 
+    flash('Unlink %s' % provider.title(), 'info')
+
     return redirect(url_for('logout'))
 
 
