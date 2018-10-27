@@ -73,7 +73,7 @@ def oauth_authorize(provider, link):
 
 @app.route('/callback/<provider>/<link>')
 def oauth_callback(provider, link):
-    if not link not current_user.is_anonymous:
+    if not link and not current_user.is_anonymous:
         return redirect(url_for('index'))
 
     oauth = OAuthSignIn.get_provider(provider)
