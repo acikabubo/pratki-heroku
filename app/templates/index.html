@@ -20,11 +20,11 @@
             <center>
                 <div class="col-sm-2 center-div">
                     <a class="btn btn-block loginBtn loginBtn-facebook"
-                        href="{{ url_for('oauth_authorize', provider='facebook') }}">
+                        href="{{ url_for('oauth_authorize', provider='facebook', link=False) }}">
                             Login with Facebook
                     </a>
                     <a class="btn btn-block loginBtn loginBtn-google"
-                        href="{{ url_for('oauth_authorize', provider='google') }}">
+                        href="{{ url_for('oauth_authorize', provider='google', link=False) }}">
                             Login with Google
                     </a>
                     <a class="btn btn-block loginBtn loginBtn-common" data-toggle="modal" data-target="#modalLoginRegister">

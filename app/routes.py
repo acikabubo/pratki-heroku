@@ -62,9 +62,9 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/authorize/<provider>')
-def oauth_authorize(provider):
-    if not current_user.is_anonymous:
+@app.route('/authorize/<provider>/<link>')
+def oauth_authorize(provider, link):
+    if not link and not current_user.is_anonymous:
         return redirect(url_for('info'))
     oauth = OAuthSignIn.get_provider(provider)
     return oauth.authorize()
@@ -94,7 +94,7 @@ def oauth_callback(provider):
         db.session.commit()
 
         logout_user()
-        return redirect(url_for('index'))
+        return redirect(url_for('profile'))
 
     login_user(ext_login.user, True)
     return redirect(url_for('info'))
