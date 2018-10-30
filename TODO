@@ -19,3 +19,11 @@ https://flask-assets.readthedocs.io/en/latest/
 1. Set env vars for facebook/google app id & pass
 2. make tmp api/path for android app (temporary not use authentication)
 3. Confirm dialog for unlink auth provider
+
+# Check this link
+http://flask.pocoo.org/docs/1.0/cli/
+flask run
+ * Tip: There are .env files present. Do "pip install python-dotenv" to use them.
+
+# Click
+ https://click.palletsprojects.com/en/7.x/

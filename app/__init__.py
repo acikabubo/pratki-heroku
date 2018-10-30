@@ -29,4 +29,4 @@ migrate = Migrate(app, db)
 assets = Environment(app)
 assets.register(bundles)
 
-from app import routes, models
+from app import views, models
