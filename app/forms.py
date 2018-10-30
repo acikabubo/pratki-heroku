@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import (StringField, PasswordField, BooleanField, TextField, 
+from wtforms import (StringField, PasswordField, BooleanField, TextField,
     DateField, SubmitField)
-from wtforms.validators import (DataRequired, Length, ValidationError, 
+from wtforms.validators import (DataRequired, Length, ValidationError,
     Email, EqualTo)
 from flask_uploads import UploadSet, TEXT
 from flask_wtf.file import FileField, FileAllowed, FileRequired
@@ -36,6 +36,13 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
+
+
+class ChangePasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField(
+        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Change')
 
 
 class UploadForm(FlaskForm):

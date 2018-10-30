@@ -5,7 +5,8 @@ from dateutil.parser import parse
 from datetime import datetime, time
 from app import app, db
 from flask import request, jsonify, render_template, redirect, flash, url_for
-from .forms import RegistrationForm, LoginForm, PackageForm, UploadForm
+from .forms import (RegistrationForm, LoginForm, ChangePasswordForm,
+    PackageForm, UploadForm)
 from .models import User, Package, ExternalLogin
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, logout_user, current_user, login_required
@@ -17,7 +18,7 @@ def index():
     if current_user.is_authenticated:
         return redirect(url_for('info'))
 
-    return render_template('index.html', 
+    return render_template('index.html',
         l_form=LoginForm(), r_form=RegistrationForm())
 
 
@@ -49,7 +50,7 @@ def login():
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
-    
+
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('info'))
 
@@ -86,8 +87,8 @@ def oauth_callback(provider, link):
     if not ext_login and current_user.is_authenticated:
         ext_login = ExternalLogin(
             provider=provider,
-            social_id=social_id, 
-            nickname=username, 
+            social_id=social_id,
+            nickname=username,
             email=email,
             user=current_user
         )
@@ -138,7 +139,26 @@ def profile():
 
     data['unlinked'] = list(set(ext_auths) - set(data['linked']))
 
-    return render_template('profile.html', data=data)
+    return render_template('profile.html',
+        data=data, cp_form=ChangePasswordForm())
+
+
+@app.route('/change_password', methods=['POST'])
+@login_required
+def change_password():
+    form = ChangePasswordForm()
+
+    if form.validate_on_submit():
+        user = current_user
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+
+        flash('Your password was changed successfully. Please login again.')
+
+        return redirect(url_for('logout'))
+
+    return redirect(url_for('profile'))
 
 
 @app.route('/info', methods=('GET', 'POST'))

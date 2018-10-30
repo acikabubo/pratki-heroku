@@ -27,5 +27,28 @@
                 {% endfor %}
             </div>
         </center>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <center>
+            <form action="/change_password" method="post" novalidate>
+                {{ cp_form.hidden_tag() }}
+
+                {{ cp_form.password.label }}
+                {{ cp_form.password(class_="form-control", size=32) }}<br>
+
+
+                {{ cp_form.password2.label }}
+                {{ cp_form.password2(class_="form-control", size=32) }}<br>
+
+                <center>
+                    {{ cp_form.submit(class_="btn btn-success") }}
+                </center>
+            </form>
+        </center>
     </div>
 {% endblock %}
