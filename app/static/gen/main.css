@@ -1,7 +1,8 @@
-.username {
+.profile {
     padding: 15px;
     text-align: right;
 }
+
 
 body { padding: 2em; }
 
@@ -134,7 +135,6 @@ div.table-responsive {
     float: right;
     border-radius: 12px;
 }
-
 
 th {
     background-color: lightgreen;

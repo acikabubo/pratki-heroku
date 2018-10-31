@@ -33,7 +33,9 @@
         {% endif %}
     {% endwith %}
     {% if current_user.is_authenticated %}
-        <p class="username">Hi, <strong>{{ current_user.username }}</strong>! <a href="{{ url_for('logout') }}">Logout</a></p>
-        <p><a href="{{ url_for('profile') }}">View profile</a></p>
+        <p class="profile">Logged as: <strong>{{ current_user.username }}</strong><br>
+            <a  href="{{ url_for('profile') }}">View profile</a><br>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </p>
     {% endif %}
 {% endblock %}

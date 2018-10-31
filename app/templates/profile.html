@@ -2,53 +2,51 @@
 
 {% block content %}
     {% if current_user.is_authenticated %}
-        <p class="username">
-            <strong>{{ current_user.username }}</strong>
-            <a href="{{ url_for('logout') }}">Logout</a>
+        <p class="profile">
+            <strong>{{ current_user.username }}</strong><br>
+            <a href="{{ url_for('logout') }}">Logout</a><br><br>
+            <a href="{{ url_for('info') }}">Go back</a>
         </p>
     {% endif %}
 
-    <a href="{{ url_for('info') }}">Go back</a>
-
     <div class="container">
-        <center>
-            <div class="col-sm-2 center-div">
-                {% for item in data.linked %}
-                    <a class="btn btn-block loginBtn loginBtn-{{ item }}"
-                        href="{{ url_for('unlink', provider=item) }}">
-                            Unlink {{ item|title }}
-                    </a>
-                {% endfor %}
-                {% for item in data.unlinked %}
-                    <a class="btn btn-block loginBtn loginBtn-{{ item }}"
-                        href="{{ url_for('oauth_authorize', provider=item, link=1) }}">
-                            Login with {{ item|title }}
-                    </a>
-                {% endfor %}
+        <!-- <center> -->
+            <div class="form-row">
+                <!-- <div class="col-3"> -->
+                <div class="span6" style="float: none; margin: 0 auto;">
+                    {% for item in data.linked %}
+                        <a class="btn btn-block loginBtn loginBtn-{{ item }}"
+                            href="{{ url_for('unlink', provider=item) }}">
+                                Unlink {{ item|title }}
+                        </a>
+                    {% endfor %}
+                </div>
+                <div class="span6">
+                    {% for item in data.unlinked %}
+                        <a class="btn btn-block loginBtn loginBtn-{{ item }}"
+                            href="{{ url_for('oauth_authorize', provider=item, link=1) }}">
+                                Login with {{ item|title }}
+                        </a>
+                    {% endfor %}
+                </div>
             </div>
-        </center>
+        <!-- </center> -->
         <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <center>
+        <!-- <center> -->
             <form action="/change_password" method="post" novalidate>
                 {{ cp_form.hidden_tag() }}
-
-                {{ cp_form.password.label }}
-                {{ cp_form.password(class_="form-control", size=32) }}<br>
-
-
-                {{ cp_form.password2.label }}
-                {{ cp_form.password2(class_="form-control", size=32) }}<br>
-
-                <center>
-                    {{ cp_form.submit(class_="btn btn-success") }}
-                </center>
+                <div class="form-row">
+                    <div class="col-2">
+                        {{ cp_form.password(class_="form-control", size=32) }}<br>
+                    </div>
+                    <div class="col-2">
+                        {{ cp_form.password2(class_="form-control", size=32) }}<br>
+                    </div>
+                    <div class="col-1">
+                        {{ cp_form.submit(class_="btn btn-success") }}
+                    </div>
+                </div>
             </form>
-        </center>
+        <!-- </center> -->
     </div>
 {% endblock %}
