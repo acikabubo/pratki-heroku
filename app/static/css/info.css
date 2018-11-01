@@ -24,10 +24,15 @@ tr:nth-child(even) {
 tfoot {
     border: none;
 }
-div.table-responsive {
-    padding: 15px;
+/* div.table-responsive {
+    background: white;
+} */
+table.table {
+    background: white;
 }
-
+body {
+    background: #76b852;
+}
 #rm_pkgs {
     display: none;
     float: right;

@@ -13,7 +13,7 @@ bundles = {
         'css/info.css',
         'css/package.css',
         'css/android.css',
-        'css/custom_index.css',
+        'css/profile.css',
         output='gen/main.css'),
 
     'img': Bundle(
