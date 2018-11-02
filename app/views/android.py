@@ -4,7 +4,7 @@ import requests
 import xmltodict
 from dateutil.parser import parse
 from datetime import datetime, time
-from flask import request, jsonify
+from flask import request, jsonify, render_template
 from app import app
 
 
@@ -107,7 +107,6 @@ def android():
 
 @app.route('/android/<track_no>/')
 def android_detail(track_no):
-
     # Initial data
     data = {
         'fnl': [],
@@ -115,11 +114,17 @@ def android_detail(track_no):
         'item_name': request.args.get('item_name', 'NO PACKAGE NAME')
     }
 
+    if len(track_no) != 13:
+        return render_template('android_detail.html', data=data)
+
     r = requests.get(
         'http://www.posta.com.mk/tnt/api/query?id=%s' % track_no)
 
     # Convert xml data to dict
     req_data = xmltodict.parse(r.text)
+
+    if not req_data['ArrayOfTrackingData']:
+        return render_template('android_detail.html', data=data)
 
     # Get required data
     tracking_data = req_data['ArrayOfTrackingData']['TrackingData']
@@ -142,6 +147,4 @@ def android_detail(track_no):
             'notice': row[4][1]
         })
 
-    # # Return raw json data (for android app)
-    # if request.user_agent.platform == 'android' and request.is_json:
-    return jsonify(data)
+    return render_template('android_detail.html', data=data)
