@@ -5,6 +5,7 @@ from ..forms import LoginForm, RegistrationForm
 from .auth import *
 from .user import *
 from .package import *
+from .android import *
 
 
 @app.route('/')
