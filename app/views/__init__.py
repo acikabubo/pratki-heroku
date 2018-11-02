@@ -14,7 +14,7 @@ def index():
         return redirect(url_for('info'))
 
     return render_template('index.html',
-        l_form=LoginForm(), r_form=RegistrationForm())
+        l_form=LoginForm(prefix='l'), r_form=RegistrationForm(prefix='r'))
 
 
 # if __name__ == '__main__':

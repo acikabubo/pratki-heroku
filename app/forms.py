@@ -79,7 +79,7 @@ class PackageForm(FlaskForm):
             'type': 'text',
             'onfocus': "(this.type='date')",
             'onblur': "if(this.value==''){this.type='text'}",
-            'min': date.today()-timedelta(days=30),
+            'min': date.today() - timedelta(days=30),
             'max': date.today(),
             'class': 'form-control',
             'placeholder': 'Shipped On'})

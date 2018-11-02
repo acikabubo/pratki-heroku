@@ -11,33 +11,32 @@
 
 {% block content %}
     {{ super() }}
-
-    {% include 'auth_modal_dialogs.html' %}
-
     <div class="login-page">
+        <h1 class="display-4 text-center">Track your packages</h1>
         <div class="form">
             <form class="register-form" action="/register" method="post">
                 {{ r_form.hidden_tag() }}
+
                 {{ r_form.username(size=32) }}<br>
                 {% for error in r_form.username.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
-                
+
                 {{ r_form.email(size=32) }}<br>
                 {% for error in r_form.email.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
-                
+
                 {{ r_form.password(size=32) }}<br>
                 {% for error in r_form.password.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
-                
+
                 {{ r_form.password2(size=32) }}<br>
                 {% for error in r_form.password2.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
-                    
+
                 {{ r_form.submit() }}
                 <p class="message">Already registered? <a href="#">Sign In</a></p>
             </form>
@@ -50,7 +49,7 @@
                 <p class="message">Not registered? <a href="#">Create an account</a></p>
             </form>
             <div class="form-row">
-                <a class="btn-block loginBtn loginBtn-facebook"
+                <a class="btn btn-block loginBtn loginBtn-facebook"
                     href="{{ url_for('oauth_authorize', provider='facebook', link=0) }}">
                         Login with Facebook
                 </a>

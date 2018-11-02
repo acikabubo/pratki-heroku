@@ -1,4 +1,4 @@
-from flask import redirect, url_for, render_template, flash
+from flask import g, redirect, url_for, render_template, flash
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from ..forms import RegistrationForm, LoginForm, ChangePasswordForm
@@ -26,17 +26,19 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('info'))
 
-    form = LoginForm()
+    form = LoginForm(prefix='l')
+
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
 
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
+            flash('Invalid username or password', 'warning')
             return redirect(url_for('login'))
 
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('info'))
 
+    flash('Error occurred while trying to login', 'warning')
     return redirect(url_for('index'))
 
 
@@ -79,6 +81,7 @@ def profile():
 
     data['unlinked'] = list(set(ext_auths) - set(data['linked']))
 
+    g.page = 'profile'
     return render_template('profile.html',
         data=data, cp_form=ChangePasswordForm())
 

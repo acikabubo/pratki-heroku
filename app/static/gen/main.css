@@ -3,7 +3,20 @@
     text-align: right;
 }
 
+.logged_as {
+    color: greenyellow;
+}
+
+.alert {
+    z-index: 100;
+}
+
 body { padding: 2em; }
+
+h1.text-center {
+    color: greenyellow;
+    padding-bottom: 20px;
+}
 
 .center-div{
     position: absolute;
@@ -133,9 +146,9 @@ body { padding: 2em; }
   height: 100%;
   left: 0;
   top: 0;
-  padding: 8% 0 0;
+  padding: 5% 0 0;
   background: #76b852;
-  
+
 }
 .form {
   position: relative;
@@ -189,7 +202,7 @@ body { padding: 2em; }
 }
 .form-row {
   padding-top: 20px;
-  float: none; 
+  float: none;
   margin: 0 auto;
 }
 
@@ -277,63 +290,18 @@ td {
     padding-top: 20px;
     background-color: lime;
 }
-/* @import url(https://fonts.googleapis.com/css?family=Roboto:300); */
-
 .profile {
     padding: 15px;
     text-align: right;
 }
 
 .profile-page {
-  position: fixed;
+  /*position: fixed;*/
   width: 100%;
   height: 100%;
   left: 0;
   top: 0;
   /* padding: 8% 0 0; */
   background: #76b852;
-  
-}
-/* .form {
-  position: relative;
-  z-index: 1;
-  background: #FFFFFF;
-  max-width: 360px;
-  margin: 0 auto 100px;
-  padding: 45px;
-  text-align: center;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-}
-.form input {
-  font-family: "Roboto", sans-serif;
-  outline: 0;
-  background: #f2f2f2;
-  width: 100%;
-  border: 0;
-  margin: 0 0 15px;
-  padding: 15px;
-  box-sizing: border-box;
-  font-size: 14px;
-}
-.form input[type=submit]{
-  font-family: "Roboto", sans-serif;
-  text-transform: uppercase;
-  outline: 0;
-  background: #4CAF50;
-  width: 100%;
-  border: 0;
-  padding: 15px;
-  color: #FFFFFF;
-  font-size: 14px;
-  -webkit-transition: all 0.3 ease;
-  transition: all 0.3 ease;
-  cursor: pointer;
-}
-.form button:hover,.form button:active,.form button:focus {
-  background: #43A047;
-} */
-.form-row {
-    padding-top: 20px;
-    float: none; 
-    margin: 0 auto;
+
 }

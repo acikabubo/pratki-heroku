@@ -1,5 +1,10 @@
 body { padding: 2em; }
 
+h1.text-center {
+    color: greenyellow;
+    padding-bottom: 20px;
+}
+
 .center-div{
     position: absolute;
     margin: auto;
@@ -128,9 +133,9 @@ body { padding: 2em; }
   height: 100%;
   left: 0;
   top: 0;
-  padding: 8% 0 0;
+  padding: 5% 0 0;
   background: #76b852;
-  
+
 }
 .form {
   position: relative;
@@ -184,6 +189,6 @@ body { padding: 2em; }
 }
 .form-row {
   padding-top: 20px;
-  float: none; 
+  float: none;
   margin: 0 auto;
 }

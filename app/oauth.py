@@ -1,7 +1,7 @@
 import json
 
-from rauth import OAuth1Service, OAuth2Service
-from flask import current_app, url_for, request, redirect, session
+from rauth import OAuth2Service
+from flask import current_app, url_for, request, redirect
 
 
 class OAuthSignIn(object):
@@ -21,7 +21,7 @@ class OAuthSignIn(object):
         pass
 
     def get_callback_url(self):
-        return url_for('oauth_callback', 
+        return url_for('oauth_callback',
             provider=self.provider_name, link=self.link, _external=True)
 
     @classmethod

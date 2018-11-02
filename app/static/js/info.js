@@ -15,15 +15,12 @@ $('#confirmed').click(function(){
         alert('Please choose at least one value.');
     }
     else {
-        alert(pkgs);
-
         data = JSON.stringify(pkgs);
 
         $.ajax({
             url: '/delete_pkgs/' + data + '/',
             type: 'DELETE',
             success: function(result) {
-                alert(result)
                 window.location.replace("/info");
             }
         });

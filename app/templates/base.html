@@ -33,11 +33,18 @@
         {% endif %}
     {% endwith %}
     {% if current_user.is_authenticated %}
-        <p class="profile">
-            Logged as: <strong>{{ current_user.username }}</strong>
+        <div class="profile">
+            <div class="logged_as">
+                Logged as: <strong>{{ current_user.username }}</strong>
+            </div>
             &nbsp;&nbsp;
             <a href="{{ url_for('logout') }}">Logout</a><br><br>
-            <a href="{{ url_for('profile') }}">View profile</a>
-        </p>
+            {% if g.page == 'info' %}
+                <a href="{{ url_for('profile') }}">View profile</a>
+            {% endif %}
+            {% if g.page == 'profile' %}
+                <a href="{{ url_for('info') }}">Go back</a>
+            {% endif %}
+        </div>
     {% endif %}
 {% endblock %}

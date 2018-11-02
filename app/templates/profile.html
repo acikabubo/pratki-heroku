@@ -1,16 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if current_user.is_authenticated %}
-<div class="profile-page">
-<p class="profile">
-    Logged as: <strong>{{ current_user.username }}</strong>
-    &nbsp;&nbsp;
-    <a href="{{ url_for('logout') }}">Logout</a><br><br>
-    <a href="{{ url_for('info') }}">Go back</a>
-</p>
-{% endif %}
-
+    {{ super() }}
+    <div class="profile-page">
+        <h1 class="display-4 text-center">Profile</h1>
+        <br>
         <div class="form">
             <form class="change-password-form" action="/change_password" method="post" novalidate>
                 {{ cp_form.hidden_tag() }}
@@ -34,5 +28,5 @@
             </div>
         </div>
     </div>
-    
+
 {% endblock %}

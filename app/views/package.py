@@ -3,7 +3,8 @@ import requests
 import xmltodict
 from dateutil.parser import parse
 from datetime import datetime, time
-from flask import request, jsonify, flash, render_template, redirect, url_for
+from flask import g, request, jsonify, flash, render_template, \
+    redirect, url_for
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
 from app import app, db
@@ -178,6 +179,7 @@ def info():
                 flash(
                     'Error occurred while reading file or invalid data format.', 'warning')
 
+    g.page = 'info'
     return render_template('info.html',
         data=data, form=form, upload_form=upload_form)
 
@@ -244,6 +246,8 @@ def delete_pkgs(pkgs):
         ).delete(synchronize_session='fetch')
 
         db.session.commit()
+
+        flash('Package/s removed successfully.', 'info')
         return "OK"
 
     except Exception:

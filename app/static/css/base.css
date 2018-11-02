@@ -2,3 +2,11 @@
     padding: 15px;
     text-align: right;
 }
+
+.logged_as {
+    color: greenyellow;
+}
+
+.alert {
+    z-index: 100;
+}
