@@ -4,6 +4,8 @@ from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_assets import Environment
+
+app = Flask(__name__)
 from .config import Config
 from .assets import bundles
 
@@ -27,4 +29,4 @@ migrate = Migrate(app, db)
 assets = Environment(app)
 assets.register(bundles)
 
-from app import routes, models
+from app import views, models

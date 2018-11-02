@@ -1,0 +1,101 @@
+<!-- Modal: Login / Register Form -->
+<div class="modal fade" id="modalLoginRegister" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog cascading-modal" role="document">
+        <!-- End Content-->
+        <div class="modal-content">
+            <!--Modal cascading tabs-->
+            <div class="modal-c-tabs">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs md-tabs tabs-2 light-blue darken-3" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#panelLogin" role="tab">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#panelRegister" role="tab">Register</a>
+                    </li>
+                </ul>
+
+                <!-- Tab panels -->
+                <div class="tab-content">
+
+                    <!-- Start Login Panel -->
+                    <div class="tab-pane fade in show active" id="panelLogin" role="tabpanel">
+                       
+                        <!--Body-->
+                        <div class="modal-body mb-1">
+                            <form action="/login" method="post" novalidate>
+                                {{ l_form.hidden_tag() }}
+                                
+                                    {{ l_form.username.label }}
+                                    {{ l_form.username(class_="form-control", size=32) }}<br>
+                                
+                                
+                                    {{ l_form.password.label }}
+                                    {{ l_form.password(class_="form-control", size=32) }}<br>
+                                
+                                {{ l_form.remember_me() }} {{ l_form.remember_me.label }}
+                                <center>
+                                    {{ l_form.submit(class_="btn btn-success") }}
+                                </center>
+                            </form>
+                        </div>
+
+                        <!--Footer-->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- End Login Panel -->
+
+                    <!--Start Register Panel -->
+                    <div class="tab-pane fade" id="panelRegister" role="tabpanel">
+                        
+                        <!--Body-->
+                        <div class="modal-body">
+                            <form action="/register" method="post">
+                                {{ r_form.hidden_tag() }}
+                                
+                                {{ r_form.username.label }}
+                                {{ r_form.username(class_="form-control", size=32) }}<br>
+                                {% for error in r_form.username.errors %}
+                                    <span style="color: red;">[{{ error }}]</span>
+                                {% endfor %}
+                            
+                                {{ r_form.email.label }}
+                                {{ r_form.email(class_="form-control", size=32) }}<br>
+                                {% for error in r_form.email.errors %}
+                                    <span style="color: red;">[{{ error }}]</span>
+                                {% endfor %}
+                            
+                                {{ r_form.password.label }}
+                                {{ r_form.password(class_="form-control", size=32) }}<br>
+                                {% for error in r_form.password.errors %}
+                                    <span style="color: red;">[{{ error }}]</span>
+                                {% endfor %}
+                            
+                                {{ r_form.password2.label }}
+                                {{ r_form.password2(class_="form-control", size=32) }}<br>
+                                {% for error in r_form.password2.errors %}
+                                    <span style="color: red;">[{{ error }}]</span>
+                                {% endfor %}
+                                
+                                <center>
+                                    {{ r_form.submit(class_="btn btn-success") }}
+                                </center>
+                            </form>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- End Register Panel -->
+                </div>
+
+            </div>
+        </div>
+        <!-- End Content -->
+    </div>
+</div>
+<!-- End Modal -->

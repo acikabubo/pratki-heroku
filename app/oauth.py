@@ -12,6 +12,7 @@ class OAuthSignIn(object):
         credentials = current_app.config['OAUTH_CREDENTIALS'][provider_name]
         self.consumer_id = credentials['id']
         self.consumer_secret = credentials['secret']
+        self.link = False
 
     def authorize(self):
         pass
@@ -20,8 +21,8 @@ class OAuthSignIn(object):
         pass
 
     def get_callback_url(self):
-        return url_for('oauth_callback', provider=self.provider_name,
-                       _external=True)
+        return url_for('oauth_callback', 
+            provider=self.provider_name, link=self.link, _external=True)
 
     @classmethod
     def get_provider(self, provider_name):
@@ -74,36 +75,41 @@ class FacebookSignIn(OAuthSignIn):
         )
 
 
-class TwitterSignIn(OAuthSignIn):
+class GoogleSignIn(OAuthSignIn):
     def __init__(self):
-        super(TwitterSignIn, self).__init__('twitter')
-        self.service = OAuth1Service(
-            name='twitter',
-            consumer_key=self.consumer_id,
-            consumer_secret=self.consumer_secret,
-            request_token_url='https://api.twitter.com/oauth/request_token',
-            authorize_url='https://api.twitter.com/oauth/authorize',
-            access_token_url='https://api.twitter.com/oauth/access_token',
-            base_url='https://api.twitter.com/1.1/'
+        super(GoogleSignIn, self).__init__('google')
+        self.service = OAuth2Service(
+            name='google',
+            client_id=self.consumer_id,
+            client_secret=self.consumer_secret,
+            authorize_url='https://accounts.google.com/o/oauth2/v2/auth',
+            access_token_url='https://www.googleapis.com/oauth2/v4/token',
+            base_url='https://www.google.com/accounts/'
         )
 
     def authorize(self):
-        request_token = self.service.get_request_token(
-            params={'oauth_callback': self.get_callback_url()}
+        return redirect(self.service.get_authorize_url(
+            scope='email profile',
+            response_type='code',
+            redirect_uri=self.get_callback_url())
         )
-        session['request_token'] = request_token
-        return redirect(self.service.get_authorize_url(request_token[0]))
 
     def callback(self):
-        request_token = session.pop('request_token')
-        if 'oauth_verifier' not in request.args:
-            return None, None, None
+        def decode_json(payload):
+            return json.loads(payload.decode('utf-8'))
+
+        if 'code' not in request.args:
+            return None, None, None, None
         oauth_session = self.service.get_auth_session(
-            request_token[0],
-            request_token[1],
-            data={'oauth_verifier': request.args['oauth_verifier']}
+            data={'code': request.args['code'],
+                  'grant_type': 'authorization_code',
+                  'redirect_uri': self.get_callback_url()},
+            decoder=decode_json
         )
-        me = oauth_session.get('account/verify_credentials.json').json()
-        social_id = 'twitter$' + str(me.get('id'))
-        username = me.get('screen_name')
-        return social_id, username, None   # Twitter does not provide email
+        me = oauth_session.get('https://www.googleapis.com/oauth2/v1/userinfo').json()
+
+        return (
+            'google$' + me['id'],
+            me.get('email').split('@')[0],
+            me.get('email')
+        )

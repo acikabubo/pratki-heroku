@@ -7,6 +7,7 @@ https://pythonprogramming.net/flask-registration-tutorial/?completed=/flask-user
 # facebook & twitter login
 https://blog.miguelgrinberg.com/post/oauth-authentication-with-flask
 https://github.com/miguelgrinberg/flask-oauth-example
+https://github.com/pdybka-ep/merging-oauth-multiple-accounts/blob/master/oauth_login.py
 
 - reorganized app and try to use blueprints
 - try to change shipped-on date format
@@ -14,3 +15,15 @@ https://github.com/miguelgrinberg/flask-oauth-example
 
 https://pythonhosted.org/Flask-Scss/
 https://flask-assets.readthedocs.io/en/latest/
+
+1. Set env vars for facebook/google app id & pass
+2. make tmp api/path for android app (temporary not use authentication)
+3. Confirm dialog for unlink auth provider
+
+# Check this link
+http://flask.pocoo.org/docs/1.0/cli/
+flask run
+ * Tip: There are .env files present. Do "pip install python-dotenv" to use them.
+
+# Click
+ https://click.palletsprojects.com/en/7.x/

@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block styles %}
+{% block scripts %}
     {{ super() }}
-    {% assets "css" %}
-        <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% assets "js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
 {% endblock %}
 
@@ -11,23 +11,55 @@
 
 {% block content %}
     {{ super() }}
-    <div class="container">
-        <div class="jumbotron">
-            <center><h2>Track Packages</h2></center>
-            <center>
-                <div class="col-sm-2 center-div">
-                    <a class="btn btn-block loginBtn loginBtn-facebook"
-                        href="{{ url_for('oauth_authorize', provider='facebook') }}">
-                            Login with Facebook
-                    </a>
-                    <a class="btn btn-block loginBtn loginBtn-google"
-                        href="{{ url_for('oauth_authorize', provider='google') }}">
-                            Login with Google
-                    </a>
-                </div>
-            </center>
+
+    {% include 'auth_modal_dialogs.html' %}
+
+    <div class="login-page">
+        <div class="form">
+            <form class="register-form" action="/register" method="post">
+                {{ r_form.hidden_tag() }}
+                {{ r_form.username(size=32) }}<br>
+                {% for error in r_form.username.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                
+                {{ r_form.email(size=32) }}<br>
+                {% for error in r_form.email.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                
+                {{ r_form.password(size=32) }}<br>
+                {% for error in r_form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                
+                {{ r_form.password2(size=32) }}<br>
+                {% for error in r_form.password2.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                    
+                {{ r_form.submit() }}
+                <p class="message">Already registered? <a href="#">Sign In</a></p>
+            </form>
+            <form class="login-form" action="/login" method="post" novalidate>
+                {{ l_form.hidden_tag() }}
+                {{ l_form.username(size=32) }}
+                {{ l_form.password(size=32) }}
+                {{ l_form.remember_me() }} {{ l_form.remember_me.label }}
+                {{ l_form.submit(class_="btn-submit") }}
+                <p class="message">Not registered? <a href="#">Create an account</a></p>
+            </form>
+            <div class="form-row">
+                <a class="btn-block loginBtn loginBtn-facebook"
+                    href="{{ url_for('oauth_authorize', provider='facebook', link=0) }}">
+                        Login with Facebook
+                </a>
+                <a class="btn btn-block loginBtn loginBtn-google"
+                    href="{{ url_for('oauth_authorize', provider='google', link=0) }}">
+                        Login with Google
+                </a>
+            </div>
         </div>
     </div>
 
-    <!-- <p align="center"><a href="{{ url_for('oauth_authorize', provider='twitter') }}">Login with Twitter</a></p> -->
 {% endblock %}
