@@ -27,3 +27,9 @@ flask run
 
 # Click
  https://click.palletsprojects.com/en/7.x/
+
+# Facebook oauth test API
+https://developers.facebook.com/tools/explorer/?method=GET&path=me%3F&version=v3.2
+
+# Google oauth test API 
+https://developers.google.com/apis-explorer/#p/oauth2/v2/oauth2.userinfo.get

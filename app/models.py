@@ -21,7 +21,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), nullable=False)
     email = db.Column(db.String(64), nullable=False)
-    password_hash = db.Column(db.String(255), nullable=False, default='')
+    password_hash = db.Column(db.String(255), default='')
     ext_logins = db.relationship('ExternalLogin', backref='user', lazy=True)
     packages = db.relationship('Package', backref='user', lazy=True)
 
