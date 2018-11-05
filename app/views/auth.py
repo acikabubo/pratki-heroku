@@ -29,7 +29,10 @@ def oauth_callback(provider, link):
     ext_login = ExternalLogin.query.filter_by(
         social_id=social_id).first()
 
-    user = ext_login.user
+    try:
+        user = ext_login.user
+    except AttributeError:
+        user = current_user
     
     # If external login does not exist create new one
     if not ext_login:    
