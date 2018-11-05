@@ -54,8 +54,7 @@ def oauth_callback(provider, link):
         db.session.add(ext_login)
         db.session.commit()
 
-        # TODO: may be need to get user from ext_login.user
-        # user = ext_login.user
+        user = ext_login.user
 
     # Login user and redirect to info page
     login_user(user, True)
