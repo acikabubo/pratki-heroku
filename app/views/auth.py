@@ -38,7 +38,7 @@ def oauth_callback(provider, link):
     if not ext_login:    
         if not current_user.is_authenticated:
             # Get user by username
-            user = User.query.filter_by(username=username)
+            user = User.query.filter_by(username=username).first()
 
             # If user does not exist create new one
             if not user:
