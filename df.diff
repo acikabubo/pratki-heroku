@@ -1,0 +1,36 @@
+diff --git a/Dockerfile b/Dockerfile
+index 37280fb..5868257 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -24,18 +24,12 @@ RUN useradd -ms /bin/bash -u $UID -g $GID $USER
+ # Install necessary packages
+ RUN pip3 install -U setuptools
+ RUN pip3 install --upgrade pip
+-RUN pip3 install pip-tools pip-review pipdeptree
++RUN pip3 install pip-tools pip-review
+ 
+-# Make requirements file and put in tmp folder
+-# ADD requirements.in /tmp/requirements.in
+-# RUN pip-compile /tmp/requirements.in
+-
+-# Sync packages
+-ADD requirements.txt /tmp/requirements.txt
+-RUN pip-sync /tmp/requirements.txt
+-
+-# Remove tmp files
+-RUN rm -rf /tmp/requirements.in /tmp/requirements.txt
++# Install required packages
++ADD requirements.in .
++RUN pip-compile --upgrade
++RUN pip-sync requirements.txt
+ 
+ # Set necessary env vars
+ ENV DRPB_ACCESS_TOKEN k3RJ3XBM0RsAAAAAAAADi5DeRos9Wo6mqAe5QX1URifVxBo5JJY2LijhD1-U_Y_t
+@@ -54,7 +48,3 @@ ADD . /pratki-heroku
+ RUN chown -R $user:$gid /pratki-heroku
+ 
+ WORKDIR /pratki-heroku
+-
+-# Shell form of ENTRYPOINT ignores any CMD
+-# or docker run command line arguments
+-# ENTRYPOINT tmux new -s server bash
