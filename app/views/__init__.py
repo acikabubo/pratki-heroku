@@ -15,7 +15,3 @@ def index():
 
     return render_template('index.html',
         l_form=LoginForm(prefix='l'), r_form=RegistrationForm(prefix='r'))
-
-
-# if __name__ == '__main__':
-#     app.run(debug=True, use_reloader=True)
