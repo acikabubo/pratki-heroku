@@ -33,20 +33,19 @@ def oauth_callback(provider, link):
         user = ext_login.user
     except AttributeError:
         user = current_user
-    
-    # If external login does not exist create new one
-    if not ext_login:    
-        if not current_user.is_authenticated:
-            # Get user by username
-            user = User.query.filter_by(username=username).first()
 
-            # If user does not exist create new one
-            if not user:
-                user = User(username=username, email=email)
-                db.session.add(user)
-                # Get id before insert
-                db.session.flush()
-        
+    # If external login does not exist create new one
+    if not ext_login:
+        # Get user by username
+        user = User.query.filter_by(username=username).first()
+
+        # If user does not exist create new one
+        if not user:
+            user = User(username=username, email=email)
+            db.session.add(user)
+            # Get id before insert
+            db.session.flush()
+
         ext_login = ExternalLogin(
             provider=provider,
             social_id=social_id,
