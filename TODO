@@ -20,6 +20,9 @@ https://flask-assets.readthedocs.io/en/latest/
 2. make tmp api/path for android app (temporary not use authentication)
 3. Confirm dialog for unlink auth provider
 
+
+try to find with is the problem -> https://www.googleapis.com/oauth2/v2/userinfo
+
 # Check this link
 http://flask.pocoo.org/docs/1.0/cli/
 flask run
@@ -31,5 +34,5 @@ flask run
 # Facebook oauth test API
 https://developers.facebook.com/tools/explorer/?method=GET&path=me%3F&version=v3.2
 
-# Google oauth test API 
+# Google oauth test API
 https://developers.google.com/apis-explorer/#p/oauth2/v2/oauth2.userinfo.get

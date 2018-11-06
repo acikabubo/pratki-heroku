@@ -107,7 +107,7 @@ class GoogleSignIn(OAuthSignIn):
             decoder=decode_json
         )
 
-        me = oauth_session.get('https://www.googleapis.com/oauth2/v2/userinfo').json()
+        me = oauth_session.get('https://www.googleapis.com/oauth2/v1/userinfo').json()
 
         return (
             'google$' + me['id'],
