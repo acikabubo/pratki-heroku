@@ -22,7 +22,7 @@
                 {% for item in data.unlinked %}
                     <a class="btn btn-block loginBtn loginBtn-{{ item }}"
                         href="{{ url_for('oauth_authorize', provider=item, link=1) }}">
-                            Login with {{ item|title }}
+                            Link with {{ item|title }}
                     </a>
                 {% endfor %}
             </div>

@@ -58,7 +58,7 @@ def unlink(provider):
 
     flash('Unlink %s' % provider.title(), 'info')
 
-    return redirect(url_for('logout'))
+    return redirect(url_for('profile'))
 
 
 @app.route('/profile')

@@ -16,9 +16,6 @@ def oauth_authorize(provider, link):
 
 @app.route('/callback/<provider>/<int:link>')
 def oauth_callback(provider, link):
-    if not current_user.is_anonymous:
-        return redirect(url_for('index'))
-
     oauth = OAuthSignIn.get_provider(provider)
     social_id, username, email = oauth.callback()
     if social_id is None:
@@ -36,7 +33,6 @@ def oauth_callback(provider, link):
 
     # If external login does not exist create new one
     if not ext_login:
-
         if not current_user.is_authenticated:
             # Get user by username
             user = User.query.filter_by(username=username).first()
@@ -62,4 +58,8 @@ def oauth_callback(provider, link):
 
     # Login user and redirect to info page
     login_user(user, True)
+
+    if link and current_user.is_authenticated:
+        flash('Successful link with %s' % ext_login.provider, 'info')
+
     return redirect(url_for('profile' if link else 'info'))
