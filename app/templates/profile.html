@@ -1,16 +1,24 @@
 {% extends "base.html" %}
 
+{% block scripts %}
+    {{ super() }}
+    {% assets "js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+{% endblock %}
+
 {% block content %}
     {{ super() }}
     <div class="profile-page">
         <h1 class="display-4 text-center">Profile</h1>
         <br>
         <div class="form">
-            <form class="change-password-form" action="/change_password" method="post" novalidate>
-                {{ cp_form.hidden_tag() }}
-                {{ cp_form.password(size=32) }}
-                {{ cp_form.password2(size=32) }}
-                {{ cp_form.submit(class_="btn-submit") }}
+            <form action="/update_profile" method="post" novalidate>
+                {{ up_form.hidden_tag() }}
+                {{ up_form.username(size=32) }}
+                {{ up_form.password(size=32) }}
+                {{ up_form.password2(size=32) }}
+                {{ up_form.submit(class_="btn-submit") }}
             </form>
             <div class="form-row">
                 {% for item in data.linked %}

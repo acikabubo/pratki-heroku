@@ -1,3 +1,6 @@
+$('.message a').click(function(){
+   $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+});
 var $checks = $("input[type='checkbox']").change(function() {
     var checked = $checks.is(':checked');
     $("#rm_pkgs").toggle(checked);
@@ -26,6 +29,4 @@ $('#confirmed').click(function(){
         });
     }
 });
-$('.message a').click(function(){
-   $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
-});
+$("#username").attr("placeholder", $("#logged-username").text());

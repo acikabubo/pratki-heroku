@@ -35,7 +35,7 @@
     {% if current_user.is_authenticated %}
         <div class="profile">
             <div class="logged_as">
-                Logged as: <strong>{{ current_user.username }}</strong>
+                Logged as: <strong id="logged-username">{{ current_user.username }}</strong>
             </div>
             &nbsp;&nbsp;
             <a href="{{ url_for('logout') }}">Logout</a><br><br>

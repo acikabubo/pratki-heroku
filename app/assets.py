@@ -3,8 +3,9 @@ from flask_assets import Bundle
 bundles = {
 
     'js': Bundle(
-        'js/info.js',
         'js/index.js',
+        'js/info.js',
+        'js/profile.js',
         output='gen/main.js'),
 
     'css': Bundle(
