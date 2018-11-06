@@ -31,6 +31,8 @@ def oauth_callback(provider, link):
     except AttributeError:
         user = current_user
 
+    new_account = False
+
     # If external login does not exist create new one
     if not ext_login:
         if not current_user.is_authenticated:
@@ -43,6 +45,7 @@ def oauth_callback(provider, link):
             db.session.add(user)
             # Get id before insert
             db.session.flush()
+            new_account = True
 
         ext_login = ExternalLogin(
             provider=provider,
@@ -58,6 +61,9 @@ def oauth_callback(provider, link):
 
     # Login user and redirect to info page
     login_user(user, True)
+
+    if new_account:
+        flash('You created new account. Welcome!', 'info')
 
     if link and current_user.is_authenticated:
         flash('Successful link with %s' % ext_login.provider, 'info')
