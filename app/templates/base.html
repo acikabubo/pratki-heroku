@@ -51,4 +51,16 @@
         </div>
     {% endif %}
     <div class='loading'></div>
+    {% block footer %}
+        <div class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="span8 offset2">
+                        <hr>
+                        <p><strong> &copy {{ now.year }} {{ name }} </strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock footer %}
 {% endblock %}

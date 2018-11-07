@@ -1,16 +1,3 @@
-.profile {
-    padding: 15px;
-    text-align: right;
-}
-
-.logged_as {
-    color: greenyellow;
-}
-
-.alert {
-    z-index: 100;
-}
-
 div.content {
     display: block;
 }
@@ -26,6 +13,26 @@ div.loading {
     height: 200px;
     background: url(../img/Eclipse-1s-200px.gif) no-repeat;
     cursor: wait;
+}
+
+.profile {
+    padding: 15px;
+    text-align: right;
+}
+
+.logged_as {
+    color: greenyellow;
+}
+
+.alert {
+    z-index: 100;
+}
+
+.footer {
+   position: absolute;
+   bottom: 0;
+   color: gray;
+   text-align: right;
 }
 
 body { padding: 2em; }
@@ -160,12 +167,10 @@ h1.text-center {
 .login-page {
   position: fixed;
   width: 100%;
-  height: 100%;
   left: 0;
   top: 0;
   padding: 5% 0 0;
   background: #76b852;
-
 }
 .form {
   position: relative;

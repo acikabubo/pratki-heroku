@@ -5,18 +5,25 @@ from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_assets import Environment
 from flask_sslify import SSLify
+from flask_caching import Cache
 
-app = Flask(__name__)
 from .config import Config
 from .assets import bundles
-
+from .contexts import *
 
 # Initialize flask app
 app = Flask(__name__)
 app.config.from_object(Config)
 
+# Define template contexts
+app.context_processor(footer_context)
+
+# Initialize cache
+cache = Cache(app,
+	config={'CACHE_TYPE': 'simple'})
+
 # Redirects from http to https
-sslify = SSLify(app)
+SSLify(app)
 
 # Initialize bootstrap
 Bootstrap(app)
@@ -33,4 +40,4 @@ migrate = Migrate(app, db)
 assets = Environment(app)
 assets.register(bundles)
 
-from app import views, models
+from .views import *

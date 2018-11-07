@@ -1,4 +1,3 @@
-
 # User login/logout/registraion
 https://github.com/shekhargulati/flask-login-example/blob/master/flask-login-example.py
 https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins
@@ -9,17 +8,10 @@ https://blog.miguelgrinberg.com/post/oauth-authentication-with-flask
 https://github.com/miguelgrinberg/flask-oauth-example
 https://github.com/pdybka-ep/merging-oauth-multiple-accounts/blob/master/oauth_login.py
 
-- reorganized app and try to use blueprints
-- try to change shipped-on date format
-- get data from db not from file
-
-https://pythonhosted.org/Flask-Scss/
+# Assets
 https://flask-assets.readthedocs.io/en/latest/
 
-1. Set env vars for facebook/google app id & pass
-2. make tmp api/path for android app (temporary not use authentication)
-3. Confirm dialog for unlink auth provider
-
+------------------------------------------------------------------------------
 
 try to find with is the problem -> https://www.googleapis.com/oauth2/v2/userinfo
 
@@ -36,3 +28,17 @@ https://developers.facebook.com/tools/explorer/?method=GET&path=me%3F&version=v3
 
 # Google oauth test API
 https://developers.google.com/apis-explorer/#p/oauth2/v2/oauth2.userinfo.get
+
+https://pythonhosted.org/Flask-Bootstrap/faq.html
+
+------------------------------------------------------------------------------
+
+# TODO
+- reorganized app and try to use blueprints
+- try to change shipped-on date format
+- get data from db not from file
+- confirm dialog for unlink auth provider
+- encrease caching timer
+- set jquery timer to inform about caching
+- try to use redis for caching
+- use redis with docker
