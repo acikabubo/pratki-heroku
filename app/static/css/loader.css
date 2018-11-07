@@ -1,0 +1,16 @@
+div.content {
+    display: block;
+}
+
+div.loading {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 200px;
+    height: 200px;
+    background: url(../img/Eclipse-1s-200px.gif) no-repeat;
+    cursor: wait;
+}

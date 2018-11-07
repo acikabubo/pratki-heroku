@@ -12,6 +12,9 @@
 
 {% block scripts %}
     {{ super() }}
+    {% assets "js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
     <script>
         setTimeout("$('.alert').slideUp('slow')", 5000)
     </script>
@@ -43,8 +46,9 @@
                 <a href="{{ url_for('profile') }}">View profile</a>
             {% endif %}
             {% if g.page == 'profile' %}
-                <a href="{{ url_for('info') }}">Go back</a>
+                <a href="{{ url_for('info') }}" onclick="loading()">Go back</a>
             {% endif %}
         </div>
     {% endif %}
+    <div class='loading'></div>
 {% endblock %}
