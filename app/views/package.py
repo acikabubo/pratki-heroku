@@ -182,7 +182,7 @@ def info():
 
     g.page = 'info'
     return render_template('info.html',
-        data=data, form=form, upload_form=upload_form)
+        data=data, form=form, upload_form=upload_form, cached=True)
 
 
 @app.route('/<track_no>/')

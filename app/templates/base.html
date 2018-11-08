@@ -61,7 +61,9 @@
                     </div>
                 </div>
             </div>
-            <p class="cache-timer">{{ cache_timeout }}</p>
+            {% if cached == True %}
+                <p class="cache-timer">{{ cache_timeout }}</p>
+            {% endif %}
         </div>
     {% endblock footer %}
 {% endblock %}
