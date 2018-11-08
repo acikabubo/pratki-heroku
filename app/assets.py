@@ -4,6 +4,7 @@ bundles = {
 
     'js': Bundle(
         'js/loader.js',
+        'js/cache_timer.js',
         'js/index.js',
         'js/info.js',
         'js/profile.js',

@@ -56,11 +56,12 @@
             <div class="container">
                 <div class="row">
                     <div class="span8 offset2">
-                        <hr>
-                        <p><strong> &copy {{ now.year }} {{ name }} </strong></p>
+                         <hr>
+                        <p><strong> &copy {{ now.year }} {{ name }} </strong></p                    >
                     </div>
                 </div>
             </div>
+            <p class="cache-timer">{{ cache_timeout }}</p>
         </div>
     {% endblock footer %}
 {% endblock %}

@@ -11,6 +11,9 @@ https://github.com/pdybka-ep/merging-oauth-multiple-accounts/blob/master/oauth_l
 # Assets
 https://flask-assets.readthedocs.io/en/latest/
 
+# Bootstrap
+https://pythonhosted.org/Flask-Bootstrap/faq.html
+
 ------------------------------------------------------------------------------
 
 try to find with is the problem -> https://www.googleapis.com/oauth2/v2/userinfo
@@ -29,8 +32,6 @@ https://developers.facebook.com/tools/explorer/?method=GET&path=me%3F&version=v3
 # Google oauth test API
 https://developers.google.com/apis-explorer/#p/oauth2/v2/oauth2.userinfo.get
 
-https://pythonhosted.org/Flask-Bootstrap/faq.html
-
 ------------------------------------------------------------------------------
 
 # TODO
@@ -42,3 +43,4 @@ https://pythonhosted.org/Flask-Bootstrap/faq.html
 - set jquery timer to inform about caching
 - try to use redis for caching
 - use redis with docker
+- style bad gateway page
