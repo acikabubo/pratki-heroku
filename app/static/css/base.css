@@ -19,5 +19,8 @@
 }
 
 .cache-timer {
-
+    padding-right: 10px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
 }

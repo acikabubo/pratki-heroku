@@ -1,5 +1,5 @@
+from flask import current_app
 from datetime import datetime
-import app
 
 # Here can be defined template contexts
 
@@ -12,6 +12,7 @@ def footer_context():
 
 
 def cache_timeout_context():
+    cache_timeout = current_app.config['CACHE_DEFAULT_TIMEOUT']
     return {
-        'cache_timeout': 10
+        'cache_timeout': cache_timeout
     }
