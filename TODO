@@ -44,3 +44,7 @@ https://developers.google.com/apis-explorer/#p/oauth2/v2/oauth2.userinfo.get
 - try to use redis for caching
 - use redis with docker
 - style bad gateway page
+
+# Install redis desktop manager
+https://snapcraft.io/redis-desktop-manager
+sudo snap install redis-desktop-manager

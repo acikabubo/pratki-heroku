@@ -20,7 +20,7 @@ app.context_processor(footer_context)
 app.context_processor(cache_timeout_context)
 
 # Initialize cache
-cache = Cache(app, config={'CACHE_TYPE': 'simple'})
+cache = Cache(app, config={'CACHE_TYPE': 'redis'})
 
 # Redirects from http to https
 SSLify(app)

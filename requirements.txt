@@ -31,6 +31,7 @@ psycopg2-binary==2.7.5
 python-dateutil==2.7.5
 python-editor==1.0.3      # via alembic
 rauth==0.7.3
+redis==2.10.6
 requests==2.20.0          # via dropbox, rauth
 six==1.11.0               # via dropbox, python-dateutil
 sqlalchemy==1.2.13        # via alembic, flask-sqlalchemy
