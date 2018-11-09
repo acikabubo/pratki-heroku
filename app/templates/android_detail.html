@@ -1,29 +1,33 @@
-<html>
-    <head>
-        <title>Package Info</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/android_detail.css') }}">
-        <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico')}}">
-    </head>
-    <body>
-        <h3 align="center"></h3>
-        <table align="center" border="1" bordercolor="#DFDCDB">
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/android_detail.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico')}}">
+{% endblock %}
+
+{% block title %}Package Info{% endblock %}
+
+{% block content %}
+    <h3 align="center"></h3>
+    <table align="center" border="1" bordercolor="#DFDCDB">
+        <tr>
+            <th class="title-padding" colspan="4"><h3>{{ data.track_no }} - {{ data.item_name }}<h3></th>
+        </tr>
+        <tr>
+            <th width="200px">From</th>
+            <th width="80px">To</th>
+            <th width="120px">Date</th>
+            <th width="150px">Notice</th>
+        </tr>
+        {% for item in data.fnl %}
             <tr>
-                <th class="title-padding" colspan="4"><h3>{{ data.track_no }} - {{ data.item_name }}<h3></th>
+                <td>{{ item.from }}</td>
+                <td>{{ item.to }}</td>
+                <td>{{ item.date }}</td>
+                <td>{{ item.notice }}</td>
             </tr>
-            <tr>
-                <th width="200px">From</th>
-                <th width="80px">To</th>
-                <th width="120px">Date</th>
-                <th width="150px">Notice</th>
-            </tr>
-            {% for item in data.fnl %}
-                <tr>
-                    <td>{{ item.from }}</td>
-                    <td>{{ item.to }}</td>
-                    <td>{{ item.date }}</td>
-                    <td>{{ item.notice }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    </body>
-</html>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+    
+        
+    

@@ -1,12 +1,5 @@
 {% extends "base.html" %}
 
-{% block scripts %}
-    {{ super() }}
-    {% assets "js" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-{% endblock %}
-
 {% block content %}
     {{ super() }}
     <div class="content">
