@@ -10,6 +10,9 @@ docker run --name pratki-db --network=pratki-net \
     -v $SRC/pg/data:/var/lib/postgresql/data -p 6543:5432 \
     -e POSTGRES_PASSWORD=postgres -d postgres:11-alpine -c fsync=off
 
+docker run --name pratki-redis --network=pratki-net \
+    -p 6379:6379 -d redis:alpine
+
 docker build --force-rm -t pratki-heroku \
     --build-arg USER=$USER \
     --build-arg UID=`id -u $USER` \
@@ -40,6 +43,7 @@ docker start -a -i pratki-heroku
 
 docker rm -f pratki-nginx
 docker rm -f pratki-db
+docker rm -f pratki-redis
 
 DANGLING=$(docker images -f "dangling=true" -q)
 if [ "x""$DANGLING" != "x" ]; then
