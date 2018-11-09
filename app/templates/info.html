@@ -1,20 +1,6 @@
 {% extends "base.html" %}
 
-{% block styles %}
-    {{ super() }}
-    {% assets "css" %}
-        <link rel="stylesheet" href="{{ ASSET_URL }}" />
-    {% endassets %}
-{% endblock %}
-
-{% block scripts %}
-    {{ super() }}
-    {% assets "js" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-{% endblock %}
-
-{% block title %}Track Packages{% endblock %}
+{% block body_attribs %} id="info-body" {% endblock %}
 
 {% block content %}
     {{ super() }}

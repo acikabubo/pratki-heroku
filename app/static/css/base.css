@@ -10,3 +10,17 @@
 .alert {
     z-index: 100;
 }
+
+.footer {
+   position: absolute;
+   bottom: 0;
+   color: gray;
+   text-align: right;
+}
+
+.cache-timer {
+    padding-right: 10px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+}

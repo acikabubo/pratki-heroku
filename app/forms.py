@@ -44,14 +44,15 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Sign In')
 
 
-class ChangePasswordForm(FlaskForm):
+class UpdateProfileForm(FlaskForm):
+    username = StringField('Username')
     password = PasswordField(
-        'Password', validators=[DataRequired()],
+        'Password',
         render_kw={"placeholder": "Password"})
     password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')],
+        'Repeat Password', validators=[EqualTo('password')],
         render_kw={"placeholder": "Repeat Password"})
-    submit = SubmitField('Change password')
+    submit = SubmitField('Update')
 
 
 class UploadForm(FlaskForm):

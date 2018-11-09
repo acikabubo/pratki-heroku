@@ -3,11 +3,15 @@ from flask_assets import Bundle
 bundles = {
 
     'js': Bundle(
-        'js/info.js',
+        'js/loader.js',
+        'js/cache_timer.js',
         'js/index.js',
+        'js/info.js',
+        'js/profile.js',
         output='gen/main.js'),
 
     'css': Bundle(
+        'css/loader.css',
         'css/base.css',
         'css/index.css',
         'css/info.css',

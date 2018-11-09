@@ -1,64 +1,56 @@
 {% extends "base.html" %}
 
-{% block scripts %}
-    {{ super() }}
-    {% assets "js" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-{% endblock %}
-
-{% block title %}Track Packages{% endblock %}
-
 {% block content %}
     {{ super() }}
-    <div class="login-page">
-        <h1 class="display-4 text-center">Track your packages</h1>
-        <div class="form">
-            <form class="register-form" action="/register" method="post">
-                {{ r_form.hidden_tag() }}
+    <div class='content'>
+        <div class="login-page">
+            <h1 class="display-4 text-center">Track your packages</h1>
+            <div class="form">
+                <form class="register-form" action="/register" method="post">
+                    {{ r_form.hidden_tag() }}
 
-                {{ r_form.username(size=32) }}<br>
-                {% for error in r_form.username.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
+                    {{ r_form.username(size=32) }}<br>
+                    {% for error in r_form.username.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
 
-                {{ r_form.email(size=32) }}<br>
-                {% for error in r_form.email.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
+                    {{ r_form.email(size=32) }}<br>
+                    {% for error in r_form.email.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
 
-                {{ r_form.password(size=32) }}<br>
-                {% for error in r_form.password.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
+                    {{ r_form.password(size=32) }}<br>
+                    {% for error in r_form.password.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
 
-                {{ r_form.password2(size=32) }}<br>
-                {% for error in r_form.password2.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
+                    {{ r_form.password2(size=32) }}<br>
+                    {% for error in r_form.password2.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
 
-                {{ r_form.submit() }}
-                <p class="message">Already registered? <a href="#">Sign In</a></p>
-            </form>
-            <form class="login-form" action="/login" method="post" novalidate>
-                {{ l_form.hidden_tag() }}
-                {{ l_form.username(size=32) }}
-                {{ l_form.password(size=32) }}
-                {{ l_form.remember_me() }} {{ l_form.remember_me.label }}
-                {{ l_form.submit(class_="btn-submit") }}
-                <p class="message">Not registered? <a href="#">Create an account</a></p>
-            </form>
-            <div class="form-row">
-                <a class="btn btn-block loginBtn loginBtn-facebook"
-                    href="{{ url_for('oauth_authorize', provider='facebook', link=0) }}">
-                        Login with Facebook
-                </a>
-                <a class="btn btn-block loginBtn loginBtn-google"
-                    href="{{ url_for('oauth_authorize', provider='google', link=0) }}">
-                        Login with Google
-                </a>
+                    {{ r_form.submit() }}
+                    <p class="message">Already registered? <a href="#">Sign In</a></p>
+                </form>
+                <form class="login-form" action="/login" method="post" novalidate>
+                    {{ l_form.hidden_tag() }}
+                    {{ l_form.username(size=32) }}
+                    {{ l_form.password(size=32) }}
+                    {{ l_form.remember_me() }} {{ l_form.remember_me.label }}
+                    {{ l_form.submit(class_="btn-submit") }}
+                    <p class="message">Not registered? <a href="#">Create an account</a></p>
+                </form>
+                <div class="form-row">
+                    <a class="btn btn-block loginBtn loginBtn-facebook"
+                        href="{{ url_for('oauth_authorize', provider='facebook', link=0) }}">
+                            Login with Facebook
+                    </a>
+                    <a class="btn btn-block loginBtn loginBtn-google"
+                        href="{{ url_for('oauth_authorize', provider='google', link=0) }}">
+                            Login with Google
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-
 {% endblock %}

@@ -2,29 +2,32 @@
 
 {% block content %}
     {{ super() }}
-    <div class="profile-page">
-        <h1 class="display-4 text-center">Profile</h1>
-        <br>
-        <div class="form">
-            <form class="change-password-form" action="/change_password" method="post" novalidate>
-                {{ cp_form.hidden_tag() }}
-                {{ cp_form.password(size=32) }}
-                {{ cp_form.password2(size=32) }}
-                {{ cp_form.submit(class_="btn-submit") }}
-            </form>
-            <div class="form-row">
-                {% for item in data.linked %}
-                    <a class="btn btn-block loginBtn loginBtn-{{ item }}"
-                        href="{{ url_for('unlink', provider=item) }}">
-                            Unlink {{ item|title }}
-                    </a>
-                {% endfor %}
-                {% for item in data.unlinked %}
-                    <a class="btn btn-block loginBtn loginBtn-{{ item }}"
-                        href="{{ url_for('oauth_authorize', provider=item, link=1) }}">
-                            Link with {{ item|title }}
-                    </a>
-                {% endfor %}
+    <div class="content">
+        <div class="profile-page">
+            <h1 class="display-4 text-center">Profile</h1>
+            <br>
+            <div class="form">
+                <form action="/update_profile" method="post" novalidate>
+                    {{ up_form.hidden_tag() }}
+                    {{ up_form.username(size=32) }}
+                    {{ up_form.password(size=32) }}
+                    {{ up_form.password2(size=32) }}
+                    {{ up_form.submit(class_="btn-submit") }}
+                </form>
+                <div class="form-row">
+                    {% for item in data.linked %}
+                        <a class="btn btn-block loginBtn loginBtn-{{ item }}"
+                            href="{{ url_for('unlink', provider=item) }}">
+                                Unlink {{ item|title }}
+                        </a>
+                    {% endfor %}
+                    {% for item in data.unlinked %}
+                        <a class="btn btn-block loginBtn loginBtn-{{ item }}"
+                            href="{{ url_for('oauth_authorize', provider=item, link=1) }}">
+                                Link with {{ item|title }}
+                        </a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

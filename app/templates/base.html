@@ -12,10 +12,15 @@
 
 {% block scripts %}
     {{ super() }}
+    {% assets "js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
     <script>
         setTimeout("$('.alert').slideUp('slow')", 5000)
     </script>
 {% endblock %}
+
+{% block title %}Track Packages{% endblock %}
 
 {% block content %}
     {{ super() }}
@@ -35,7 +40,7 @@
     {% if current_user.is_authenticated %}
         <div class="profile">
             <div class="logged_as">
-                Logged as: <strong>{{ current_user.username }}</strong>
+                Logged as: <strong id="logged-username">{{ current_user.username }}</strong>
             </div>
             &nbsp;&nbsp;
             <a href="{{ url_for('logout') }}">Logout</a><br><br>
@@ -43,8 +48,24 @@
                 <a href="{{ url_for('profile') }}">View profile</a>
             {% endif %}
             {% if g.page == 'profile' %}
-                <a href="{{ url_for('info') }}">Go back</a>
+                <a href="{{ url_for('info') }}" onclick="loading()">Go back</a>
             {% endif %}
         </div>
     {% endif %}
+    <div class='loading'></div>
+    {% block footer %}
+        <div class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="span8 offset2">
+                         <hr>
+                        <p><strong> &copy {{ now.year }} {{ name }} </strong></p>
+                    </div>
+                </div>
+            </div>
+            {% if cached == True %}
+                <p class="cache-timer">{{ cache_timeout }}</p>
+            {% endif %}
+        </div>
+    {% endblock footer %}
 {% endblock %}

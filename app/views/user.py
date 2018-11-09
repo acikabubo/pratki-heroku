@@ -1,7 +1,7 @@
 from flask import g, redirect, url_for, render_template, flash
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
-from ..forms import RegistrationForm, LoginForm, ChangePasswordForm
+from ..forms import RegistrationForm, LoginForm, UpdateProfileForm
 from ..models import User, ExternalLogin
 
 
@@ -82,21 +82,30 @@ def profile():
 
     g.page = 'profile'
     return render_template('profile.html',
-        data=data, cp_form=ChangePasswordForm())
+        data=data, up_form=UpdateProfileForm())
 
 
-@app.route('/change_password', methods=['POST'])
+@app.route('/update_profile', methods=['POST'])
 @login_required
-def change_password():
-    form = ChangePasswordForm()
+def update_profile():
+    form = UpdateProfileForm()
 
     if form.validate_on_submit():
         user = current_user
-        user.set_password(form.password.data)
+
+        username = form.username.data
+        password = form.password.data
+
+        if username:
+            user.username = username
+
+        if password:
+            user.set_password(password)
+
         db.session.add(user)
         db.session.commit()
 
-        flash('Your password was changed successfully. Please login again.')
+        flash('Successfully update your profile data. Please login again.')
 
         return redirect(url_for('logout'))
 
