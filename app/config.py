@@ -8,10 +8,10 @@ class Config(object):
     WTF_CSRF_SECRET_KEY = "99ef5388-12c3-4a10-9e98-a1a67b9d4d6a"
 
     CACHE_DEFAULT_TIMEOUT = 300  # seconds
-    CACHE_REDIS_URL = os.environ.get('REDIS_URL') or \
-        'redis://pratki-redis:6379'
+    # CACHE_REDIS_URL = os.environ.get('REDIS_URL') or \
+        # 'redis://pratki-redis:6379'  # Use this for development
     CACHE_REDIS_DB = 0
-    # CACHE_REDIS_URL = 'redis://h:p4cf37f6f6b51abd95a99cd36aba622c6c370d922259e6a9e5a18143416b1ce6c@ec2-34-254-120-196.eu-west-1.compute.amazonaws.com:10589'
+    CACHE_REDIS_URL = 'redis://h:p4cf37f6f6b51abd95a99cd36aba622c6c370d922259e6a9e5a18143416b1ce6c@ec2-34-254-120-196.eu-west-1.compute.amazonaws.com:10589'
 
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'postgres://vzdnqoovnvgmgu:1582147d7b2ff4ee88b52ca47a48064cafb997fcea0d78bbac3cebf76fc7bbbe@ec2-54-217-235-159.eu-west-1.compute.amazonaws.com:5432/d8kstj8qf9g683'
