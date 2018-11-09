@@ -5,10 +5,11 @@ import xmltodict
 from dateutil.parser import parse
 from datetime import datetime, time
 from flask import request, jsonify, render_template
-from app import app
+from app import app, cache
 
 
 @app.route('/android')
+@cache.cached()
 def android():
     try:
         dbx = dropbox.Dropbox(os.environ['DRPB_ACCESS_TOKEN'])
@@ -106,6 +107,7 @@ def android():
 
 
 @app.route('/android/<track_no>/')
+@cache.cached()
 def android_detail(track_no):
     # Initial data
     data = {
