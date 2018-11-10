@@ -7,7 +7,7 @@ class Config(object):
     SECRET_KEY = "bb2d178c-ae16-4be0-9926-764c552082e9"
     WTF_CSRF_SECRET_KEY = "99ef5388-12c3-4a10-9e98-a1a67b9d4d6a"
 
-    CACHE_DEFAULT_TIMEOUT = 300  # seconds
+    CACHE_DEFAULT_TIMEOUT = 10  # seconds
     # CACHE_REDIS_URL = os.environ.get('REDIS_URL') or \
         # 'redis://pratki-redis:6379'  # Use this for development
     CACHE_REDIS_DB = 0

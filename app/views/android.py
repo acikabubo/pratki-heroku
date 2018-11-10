@@ -150,4 +150,4 @@ def android_detail(track_no):
             'notice': row[4][1]
         })
 
-    return render_template('package.html', data=data)
+    return render_template('android_detail.html', data=data)

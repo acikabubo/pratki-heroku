@@ -298,27 +298,6 @@ div.table-responsive {
     padding: 15px;
 }
 
-th {
-    background-color: lightgreen;
-    height: 30px;
-    font-weight: bold;
-    text-align: center;
-    padding-right: 20px;
-    padding-left: 20px;
-}
-
-tr:nth-child(odd) {
-   background-color: #DFDCDB;
-}
-
-td {
-    padding-left: 5px;
-}
-
-.title-padding {
-    padding-top: 20px;
-    background-color: lime;
-}
 .profile {
     padding: 15px;
     text-align: right;
