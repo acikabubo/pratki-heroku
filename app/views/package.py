@@ -99,10 +99,6 @@ def info():
     # Sort by shipped ago
     packages = sorted(packages, key=lambda k: k['shipped_ago'])
 
-    # Return raw json data (for android app)
-    if request.user_agent.platform == 'android' and request.is_json:
-        return jsonify(packages)
-
     # Make final data
     data = {
         'packages': packages,
@@ -198,7 +194,7 @@ def pkg_details(track_no):
     }
 
     if len(track_no) != 13:
-        return render_template('package.html', data=data)
+        return render_template('package.html', data=data, cached=True)
 
     r = requests.get(
         'http://www.posta.com.mk/tnt/api/query?id=%s' % track_no)
@@ -207,7 +203,7 @@ def pkg_details(track_no):
     req_data = xmltodict.parse(r.text)
 
     if not req_data['ArrayOfTrackingData']:
-        return render_template('package.html', data=data)
+        return render_template('package.html', data=data, cached=True)
 
     # Get required data
     tracking_data = req_data['ArrayOfTrackingData']['TrackingData']
@@ -230,10 +226,7 @@ def pkg_details(track_no):
             'notice': row[4][1]
         })
 
-    if request.user_agent.platform == 'android':
-        return render_template('android.html', data=data)
-
-    return render_template('package.html', data=data)
+    return render_template('package.html', data=data, cached=True)
 
 
 @app.route('/delete_pkgs/<pkgs>/', methods=['DELETE'])

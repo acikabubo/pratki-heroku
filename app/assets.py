@@ -16,7 +16,6 @@ bundles = {
         'css/index.css',
         'css/info.css',
         'css/package.css',
-        'css/android.css',
         'css/profile.css',
         output='gen/main.css'),
 
