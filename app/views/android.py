@@ -150,8 +150,4 @@ def android_detail(track_no):
             'notice': row[4][1]
         })
 
-    # Return raw json data
-    if request.is_json:
-        return jsonify(data)
-
     return render_template('package.html', data=data)
