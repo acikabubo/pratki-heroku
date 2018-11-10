@@ -5,24 +5,42 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico')}}">
     </head>
     <body>
-        <table align="center" border="1" bordercolor="#DFDCDB">
-            <tr>
-                <th class="title-padding" colspan="4"><h3>{{ data.track_no }} - {{ data.item_name }}<h3></th>
-            </tr>
-            <tr>
-                <th width="200px">From</th>
-                <th width="80px">To</th>
-                <th width="120px">Date</th>
-                <th width="150px">Notice</th>
-            </tr>
-            {% for item in data.fnl %}
-                <tr>
-                    <td>{{ item.from }}</td>
-                    <td>{{ item.to }}</td>
-                    <td>{{ item.date }}</td>
-                    <td>{{ item.notice }}</td>
-                </tr>
-            {% endfor %}
-        </table>
+        {% if data.fnl %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-sm">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="title-padding" colspan="4">
+                            <h5 align="center">
+                                <strong>{{ data.track_no }} - {{ data.item_name }}</strong>
+                            <h5>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Date</th>
+                        <th>Notice</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in data.fnl %}
+                    <tr>
+                        <td>{{ item.from }}</td>
+                        <td>{{ item.to }}</td>
+                        <td>{{ item.date }}</td>
+                        <td>{{ item.notice }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <div class="jumbotron"  style="background-color:transparent;">
+                <center>
+                    <h4>No data for {{ data.track_no }} - {{ data.item_name }}</h4>
+                </center>
+            </div>
+        {% endif %}
     </body>
 </html>

@@ -102,9 +102,10 @@ def android():
     packages = sorted(packages, key=lambda k: k['shipped_ago'])
 
     # # Return raw json data (for android app)
-    # if request.user_agent.platform == 'android' and request.is_json:
-    if request.is_json:
+    if request.user_agent.platform == 'android' and request.is_json:
         return jsonify(packages)
+
+    return jsonify([])
 
 
 @app.route('/android/<track_no>/')
@@ -150,4 +151,5 @@ def android_detail(track_no):
             'notice': row[4][1]
         })
 
-    return render_template('android_detail.html', data=data)
+    if request.user_agent.platform == 'android':
+        return render_template('android_detail.html', data=data)

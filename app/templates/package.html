@@ -3,6 +3,7 @@
 {% block body_attribs %} id="info-body" {% endblock %}
 
 {% block content %}
+    {{ super() }}
     {% if data.fnl %}
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-hover table-sm">
