@@ -6,6 +6,9 @@ from flask_login import LoginManager
 from flask_assets import Environment
 from flask_sslify import SSLify
 from flask_caching import Cache
+from flask_debugtoolbar import DebugToolbarExtension
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 from .config import Config
 from .assets import bundles
@@ -19,11 +22,18 @@ app.config.from_object(Config)
 app.context_processor(footer_context)
 app.context_processor(cache_timeout_context)
 
-# Initialize cache
-cache = Cache(app, config={'CACHE_TYPE': 'redis'})
+# Initialize debug toolbar
+DebugToolbarExtension(app)
 
 # Redirects from http to https
 SSLify(app)
+
+# Initialize cache
+cache = Cache(app)
+
+# Initialize limiter
+limiter = Limiter(
+    app, key_func=get_remote_address)
 
 # Initialize bootstrap
 Bootstrap(app)

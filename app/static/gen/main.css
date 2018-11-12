@@ -297,6 +297,10 @@ td {
 div.table-responsive {
     padding: 15px;
 }
+h4.text-center {
+    color: greenyellow;
+    padding-bottom: 20px;
+}
 
 .profile {
     padding: 15px;

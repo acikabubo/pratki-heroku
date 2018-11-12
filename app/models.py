@@ -16,6 +16,9 @@ class ExternalLogin(db.Model):
     email = db.Column(db.String(64), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+    def __repr__(self):
+        """Repr."""
+        return '{0}: {1}'. format(self.provider.title(), self.id)
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,7 +36,7 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         """Repr."""
-        return '<User {0}. {1}>'. format(self.id, self.username)
+        return 'User: {1}({0})'. format(self.id, self.username)
 
 
 @lm.user_loader
@@ -50,4 +53,4 @@ class Package(db.Model):
 
     def __repr__(self):
         """Repr."""
-        return '<Package {}>'.format(self.name)
+        return 'Package: {}'.format(self.name)

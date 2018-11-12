@@ -48,6 +48,9 @@ ENV FB_SECRET ea3bb54866a4bc6667a78cabca0034be
 ENV G_ID = 1073788361141-872fbem3o8mr9ol71730ltoppb21ansq.apps.googleusercontent.com
 ENV G_SECRET Qy012SanPwRfj7oFCCj1UtAI
 
+# It use for debug purposes and from flask debug toolbar
+ENV FLASK_ENV development
+
 USER $USER
 
 ADD . /pratki-heroku

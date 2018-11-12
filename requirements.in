@@ -9,6 +9,8 @@ Flask-Uploads
 Flask-Assets
 Flask-SSLify
 Flask-Caching
+flask-debugtoolbar
+Flask-Limiter
 rauth
 gunicorn
 xmltodict

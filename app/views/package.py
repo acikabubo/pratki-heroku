@@ -7,7 +7,7 @@ from flask import g, request, jsonify, flash, render_template, \
     redirect, url_for
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
-from app import app, db, cache
+from app import app, db, cache, limiter
 from ..forms import PackageForm, UploadForm
 from ..models import Package
 
@@ -15,6 +15,7 @@ from ..models import Package
 @app.route('/info', methods=('GET', 'POST'))
 @login_required
 @cache.cached()
+@limiter.limit('5/hour', key_func = lambda : current_user.username)
 def info():
     # Get packages from logged user
     pkgs = Package.query.filter_by(user=current_user).all()
@@ -184,6 +185,7 @@ def info():
 @app.route('/<track_no>/')
 @login_required
 @cache.cached()
+@limiter.limit('5/hour', key_func = lambda : current_user.username)
 def pkg_details(track_no):
 
     # Initial data

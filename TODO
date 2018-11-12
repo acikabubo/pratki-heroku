@@ -14,6 +14,9 @@ https://flask-assets.readthedocs.io/en/latest/
 # Bootstrap
 https://pythonhosted.org/Flask-Bootstrap/faq.html
 
+# OAuth
+https://pythonhosted.org/Flask-OAuth/
+
 ------------------------------------------------------------------------------
 
 try to find with is the problem -> https://www.googleapis.com/oauth2/v2/userinfo
