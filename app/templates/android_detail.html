@@ -4,10 +4,11 @@
     {% assets "css" %}
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/android_detail.css') }}">
     {% endassets %}        
->>>>>>> master
 {% endblock %}
 
 {% block title %}Package Info{% endblock %}
+
+{% block content %}
     {% if data.fnl %}
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-hover table-sm">
@@ -46,5 +47,3 @@
         </div>
     {% endif %}
 {% endblock %}
-        
->>>>>>> master
