@@ -9,10 +9,13 @@ from flask_caching import Cache
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_mail import Mail
 
 from .config import Config
 from .assets import bundles
+from .celery_config import make_celery
 from .contexts import *
+
 
 # Initialize flask app
 app = Flask(__name__)
@@ -50,4 +53,11 @@ migrate = Migrate(app, db)
 assets = Environment(app)
 assets.register(bundles)
 
+# Initialize celery
+celery = make_celery(app)
+
+# Initialize mail
+mail = Mail(app)
+
 from .views import *
+from .tasks import *
