@@ -12,7 +12,6 @@ docker run --name pratki-db --network=pratki-net \
 
 docker run --name pratki-redis --network=pratki-net \
     -p 6379:6379 \
-    -p 5555:5555 \
     -d redis:alpine
 
 docker build --force-rm -t pratki-heroku \
@@ -34,6 +33,7 @@ docker run \
     --name pratki-nginx \
     -p 80:80 \
     -p 443:443 \
+    -p 5555:5555 \
     --network pratki-net \
     -v $SRC/nginx/nginx.conf:/etc/nginx/conf.d/default.conf \
     -v $SRC/nginx/ssl/pratki-heroku.crt:/etc/nginx/pratki-heroku.crt \

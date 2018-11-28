@@ -25,7 +25,7 @@ def send_pkg_notif(recipient):
 def setup_periodic_tasks(sender, **kwargs):
     # Calls add together every 10 seconds.
     sender.add_periodic_task(
-        10.0, add_together, name='add together 10 seconds')
+        10.0, add_together, name='add_together every 10 seconds')
 
     # # Call send_pkg_notif every 30 seconds.
     # sender.add_periodic_task(
