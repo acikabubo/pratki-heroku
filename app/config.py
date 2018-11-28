@@ -2,13 +2,13 @@ import os
 
 
 class Config(object):
-    
+
     DEBUG = os.environ.get('FLASK_ENV') == 'development'
     DEBUG_TB_ENABLED = DEBUG
     SQLALCHEMY_RECORD_QUERIES = DEBUG
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 
-    TEMPLATES_AUTO_RELOAD = True    
+    TEMPLATES_AUTO_RELOAD = True
 
     SECRET_KEY = "bb2d178c-ae16-4be0-9926-764c552082e9"
     WTF_CSRF_SECRET_KEY = "99ef5388-12c3-4a10-9e98-a1a67b9d4d6a"
@@ -19,12 +19,25 @@ class Config(object):
 
     CACHE_DEFAULT_TIMEOUT = 300  # seconds
     CACHE_TYPE = 'redis'
-    # CACHE_REDIS_URL = os.environ.get('REDIS_URL') or \
-        # 'redis://pratki-redis:6379'  # Use this for development
     CACHE_REDIS_DB = 0
-    CACHE_REDIS_URL = 'redis://h:p4cf37f6f6b51abd95a99cd36aba622c6c370d922259e6a9e5a18143416b1ce6c@ec2-34-254-120-196.eu-west-1.compute.amazonaws.com:10589'
+    # CACHE_REDIS_URL = 'redis://h:p4cf37f6f6b51abd95a99cd36aba622c6c370d922259e6a9e5a18143416b1ce6c@ec2-34-254-120-196.eu-west-1.compute.amazonaws.com:10589'
+    CACHE_REDIS_URL = os.environ.get('REDIS_URL') or \
+        'redis://pratki-redis:6379'  # Use this for development
 
+    # Celery
+    CELERY_TIMEZONE = 'Europe/Skopje'
+    CELERY_BROKER_URL = 'redis://pratki-redis:6379',
+    CELERY_RESULT_BACKEND = 'redis://pratki-redis:6379'
+
+    # Set limiter storage url
     RATELIMIT_STORAGE_URL = 'redis://h:p4cf37f6f6b51abd95a99cd36aba622c6c370d922259e6a9e5a18143416b1ce6c@ec2-34-254-120-196.eu-west-1.compute.amazonaws.com:10589'
+
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
+    MAIL_DEFAULT_SENDER = 'pratki.heroku@gmail.com'
+    MAIL_USERNAME = 'pratki.heroku@gmail.com'
+    MAIL_PASSWORD = 'Pratki@Heroku'
 
     OAUTH_CREDENTIALS = {
         'facebook': {
@@ -32,8 +45,8 @@ class Config(object):
             'secret': os.environ.get('FB_SECRET')  # pratki facebook app
         },
         'google': {
-            'id': os.environ.get('G_ID'),         # pratki google app
-            'secret': os.environ.get('G_SECRET')  # pratki google app
+            'id': os.environ.get('G_ID'),          # pratki google app
+            'secret': os.environ.get('G_SECRET')   # pratki google app
         }
     }
 

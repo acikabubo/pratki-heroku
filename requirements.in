@@ -11,6 +11,7 @@ Flask-SSLify
 Flask-Caching
 flask-debugtoolbar
 Flask-Limiter
+Flask-Mail
 rauth
 gunicorn
 xmltodict
@@ -18,3 +19,5 @@ python-dateutil
 pipdeptree
 dropbox
 redis
+flower
+-e git+https://github.com/celery/celery.git@master#egg=celery
