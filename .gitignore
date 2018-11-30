@@ -3,3 +3,7 @@ __pycache__
 .vscode
 .webassets-cache
 celerybeat-schedule
+celerybeat.pid
+*.err.log
+*.out.log
+supervisord.log

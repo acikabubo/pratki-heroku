@@ -23,6 +23,8 @@ docker build --force-rm -t pratki-heroku \
 docker create --rm -it \
     --name pratki-heroku \
     -v $SRC:/pratki-heroku \
+    -v $SRC/supervisor/pratki.conf:/etc/supervisor/conf.d/pratki.conf \
+    -v $SRC/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf \
     --hostname server \
     --network pratki-net \
     -p 5000:5000 \
@@ -34,11 +36,13 @@ docker run \
     -p 80:80 \
     -p 443:443 \
     -p 5555:5555 \
+    -p 9001:9001 \
     --network pratki-net \
     -v $SRC/nginx/nginx.conf:/etc/nginx/conf.d/default.conf \
     -v $SRC/nginx/ssl/pratki-heroku.crt:/etc/nginx/pratki-heroku.crt \
     -v $SRC/nginx/ssl/pratki-heroku.key:/etc/nginx/pratki-heroku.key \
     -v $SRC/nginx/.htpasswd:/etc/nginx/.htpasswd \
+    -v $SRC/nginx/html/401.html:/usr/share/nginx/html/401.html \
     -v $SRC/nginx/html/502.html:/usr/share/nginx/html/502.html \
     -d nginx:stable-alpine sh -c "while true; do nginx -g 'daemon off;'; sleep 1; done"
 

@@ -7,7 +7,7 @@ ENV LANG=C.UTF-8
 # Update system and install tmux
 RUN apt-get update -qq  && \
     apt-get upgrade -yqq && \
-    apt-get install sudo tmux -yqq && \
+    apt-get install sudo tmux supervisor -yqq && \
     apt-get autoremove -y
 
 # Set git aliases
@@ -50,6 +50,8 @@ ENV G_SECRET Qy012SanPwRfj7oFCCj1UtAI
 
 # It use for debug purposes and from flask debug toolbar
 ENV FLASK_ENV development
+
+RUN echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
 
 USER $USER
 

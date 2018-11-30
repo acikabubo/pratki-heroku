@@ -1,1 +1,1 @@
-celery flower -A app.celery --port=5555
+celery flower -A app.celery --url_prefix=flower --port=5555
