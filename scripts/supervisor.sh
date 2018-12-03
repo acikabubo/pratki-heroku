@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Make logs directories
+mkdir -p -v logs/beat
+mkdir -p -v logs/celery
+mkdir -p -v logs/flower
+mkdir -p -v logs/server
+mkdir -p -v logs/supervisor
+
 # Starting supervisor service
 sudo service supervisor start  # starting supervisor service
 

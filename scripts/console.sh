@@ -23,8 +23,8 @@ docker build --force-rm -t pratki-heroku \
 docker create --rm -it \
     --name pratki-heroku \
     -v $SRC:/pratki-heroku \
-    -v $SRC/supervisor/pratki.conf:/etc/supervisor/conf.d/pratki.conf \
-    -v $SRC/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf \
+    -v $SRC/config/supervisor/pratki.conf:/etc/supervisor/conf.d/pratki.conf \
+    -v $SRC/config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf \
     --hostname server \
     --network pratki-net \
     -p 5000:5000 \
