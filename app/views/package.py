@@ -33,14 +33,17 @@ def add_pkgs():
             # When user add new package clean cache
             cache.delete(current_user.username)
 
-            return redirect(url_for('info'))
-
             flash('Package created successfully.', 'info')
+            
+            return redirect(url_for('info'))
         except IntegrityError:
             db.session.rollback()
+
             flash(
                 'There is package with tracking number: %s.' % form.track_no.data,
                 'warning')
+
+            return redirect(url_for('info'))
 
     if 'file' in request.files:
         uploaded_file = request.files['file']
@@ -87,6 +90,9 @@ def add_pkgs():
             except Exception as ex:
                 flash(
                     'Error occurred while reading file or invalid data format.', 'warning')
+
+                return redirect(url_for('info'))
+            
 
 @app.route('/info', methods=['GET'])
 @login_required
