@@ -12,9 +12,85 @@ from ..forms import PackageForm, UploadForm
 from ..models import Package
 
 
-@app.route('/info', methods=('GET', 'POST'))
+
+@app.route('/add_pkgs', methods=['POST'])
 @login_required
-@cache.cached()
+def add_pkgs():
+    form = PackageForm()
+    upload_form = UploadForm()
+
+    if form.validate_on_submit():
+        try:
+            package = Package(
+                track_no=form.track_no.data,
+                shipped_on=form.shipped_on.data,
+                name=form.name.data,
+                user=current_user)
+
+            db.session.add(package)
+            db.session.commit()
+
+            # When user add new package clean cache
+            cache.delete(current_user.username)
+
+            return redirect(url_for('info'))
+
+            flash('Package created successfully.', 'info')
+        except IntegrityError:
+            db.session.rollback()
+            flash(
+                'There is package with tracking number: %s.' % form.track_no.data,
+                'warning')
+
+    if 'file' in request.files:
+        uploaded_file = request.files['file']
+
+        if uploaded_file:
+            try:
+                err_occ = False
+
+                file_content = uploaded_file.read().decode('utf8')
+                pkgs = [item.split(' - ') for item in file_content.split('\n')]
+
+                total = 0
+                for track_no, shipped_on, pkg_name in pkgs:
+                    try:
+                        package = Package(
+                            track_no=track_no,
+                            shipped_on=parse(shipped_on, dayfirst=True),
+                            name=pkg_name,
+                            user=current_user
+                        )
+                        db.session.add(package)
+                        db.session.flush()
+
+                        total += 1
+                    except IntegrityError:
+                        db.session.rollback()
+                        continue
+                    except Exception as ex:
+                        err_occ = True
+                        db.session.rollback()
+                        flash('Error occurred while syncing data.', 'warning')
+                        break
+
+                if not err_occ:
+                    db.session.commit()
+
+                    if total:
+                        flash('Sync %s packages.' % total, 'info')
+
+                        return redirect(url_for('info'))
+                    else:
+                        flash('There is no packages for sync.', 'info')
+
+            except Exception as ex:
+                flash(
+                    'Error occurred while reading file or invalid data format.', 'warning')
+
+@app.route('/info', methods=['GET'])
+@login_required
+@cache.cached(key_prefix=lambda : current_user.username)
 @limiter.limit('5/hour', key_func = lambda : current_user.username)
 def info():
     # Get packages from logged user
@@ -110,76 +186,9 @@ def info():
         }
     }
 
-    form = PackageForm()
-    upload_form = UploadForm()
-
-    if form.validate_on_submit():
-        try:
-            package = Package(
-                track_no=form.track_no.data,
-                shipped_on=form.shipped_on.data,
-                name=form.name.data,
-                user=current_user)
-
-            db.session.add(package)
-            db.session.commit()
-
-            flash('Package created successfully.', 'info')
-        except IntegrityError:
-            db.session.rollback()
-            flash(
-                'There is package with tracking number: %s.' % form.track_no.data,
-                'warning')
-
-    if 'file' in request.files:
-        uploaded_file = request.files['file']
-
-        if uploaded_file:
-            try:
-                err_occ = False
-
-                file_content = uploaded_file.read().decode('utf8')
-                pkgs = [item.split(' - ') for item in file_content.split('\n')]
-
-                total = 0
-                for track_no, shipped_on, pkg_name in pkgs:
-                    try:
-                        package = Package(
-                            track_no=track_no,
-                            shipped_on=parse(shipped_on, dayfirst=True),
-                            name=pkg_name,
-                            user=current_user
-                        )
-                        db.session.add(package)
-                        db.session.flush()
-
-                        total += 1
-                    except IntegrityError:
-                        db.session.rollback()
-                        continue
-                    except Exception as ex:
-                        err_occ = True
-                        db.session.rollback()
-                        flash('Error occurred while syncing data.', 'warning')
-                        break
-
-                if not err_occ:
-                    db.session.commit()
-
-                    if total:
-                        flash('Sync %s packages.' % total, 'info')
-
-                        return redirect(url_for('info'))
-                    else:
-                        flash('There is no packages for sync.', 'info')
-
-            except Exception as ex:
-                flash(
-                    'Error occurred while reading file or invalid data format.', 'warning')
-
     g.page = 'info'
     return render_template('info.html',
-        data=data, form=form, upload_form=upload_form, cached=True)
+        data=data, form=PackageForm(), upload_form=UploadForm(), cached=True)
 
 
 @app.route('/<track_no>/')
@@ -243,6 +252,9 @@ def delete_pkgs(pkgs):
         ).delete(synchronize_session='fetch')
 
         db.session.commit()
+
+        # When user remove packages clear the cache
+        cache.delete(current_user.username)
 
         flash('Package/s removed successfully.', 'info')
         return "OK"
