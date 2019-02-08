@@ -28,7 +28,7 @@
 
                         <!--Body-->
                         <div class="modal-body mb-1">
-                            <form action="" method="post" role="form">
+                            <form action="/add_pkgs" method="post" role="form">
                                 {{ form.csrf }}
                                 <div class="form-group">
                                     {{ form.hidden_tag() }}
@@ -60,7 +60,7 @@
 
                         <!--Body-->
                         <div class="modal-body">
-                            <form action="" method="post" enctype="multipart/form-data" role="form">
+                            <form action="/add_pkgs" method="post" enctype="multipart/form-data" role="form">
                                 {{ form.csrf }}
                                 <div class="form-group">
                                     {{ form.hidden_tag() }} {{ upload_form.file }}

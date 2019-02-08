@@ -6,6 +6,7 @@ from .auth import *
 from .user import *
 from .package import *
 from .android import *
+from .errors import *
 
 
 @app.route('/')

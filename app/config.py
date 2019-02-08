@@ -2,6 +2,12 @@ import os
 
 
 class Config(object):
+
+    DEBUG = os.environ.get('FLASK_ENV') == 'development'
+    DEBUG_TB_ENABLED = DEBUG
+    SQLALCHEMY_RECORD_QUERIES = DEBUG
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
+
     TEMPLATES_AUTO_RELOAD = True
 
     SECRET_KEY = "bb2d178c-ae16-4be0-9926-764c552082e9"
@@ -18,8 +24,20 @@ class Config(object):
         'postgres://vzdnqoovnvgmgu:1582147d7b2ff4ee88b52ca47a48064cafb997fcea0d78bbac3cebf76fc7bbbe@ec2-54-217-235-159.eu-west-1.compute.amazonaws.com:5432/d8kstj8qf9g683'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    ALLOWED_EXTENSIONS = set(['txt'])
-    UPLOAD_FOLDER = '/pratki-heroku/uploads'
+    # Celery
+    CELERY_TIMEZONE = 'Europe/Skopje'
+    CELERY_BROKER_URL = 'redis://pratki-redis:6379',
+    CELERY_RESULT_BACKEND = 'redis://pratki-redis:6379'
+
+    # Set limiter storage url
+    RATELIMIT_STORAGE_URL = 'redis://h:p4cf37f6f6b51abd95a99cd36aba622c6c370d922259e6a9e5a18143416b1ce6c@ec2-34-254-120-196.eu-west-1.compute.amazonaws.com:10589'
+
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
+    MAIL_DEFAULT_SENDER = 'pratki.heroku@gmail.com'
+    MAIL_USERNAME = 'pratki.heroku@gmail.com'
+    MAIL_PASSWORD = 'Pratki@Heroku'
 
     OAUTH_CREDENTIALS = {
         'facebook': {
@@ -27,7 +45,10 @@ class Config(object):
             'secret': os.environ.get('FB_SECRET')  # pratki facebook app
         },
         'google': {
-            'id': os.environ.get('G_ID'),         # pratki google app
-            'secret': os.environ.get('G_SECRET')  # pratki google app
+            'id': os.environ.get('G_ID'),          # pratki google app
+            'secret': os.environ.get('G_SECRET')   # pratki google app
         }
     }
+
+    ALLOWED_EXTENSIONS = set(['txt'])
+    UPLOAD_FOLDER = '/pratki-heroku/uploads'

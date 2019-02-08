@@ -153,3 +153,5 @@ def android_detail(track_no):
 
     if request.user_agent.platform == 'android':
         return render_template('android_detail.html', data=data)
+
+    return render_template('android_detail.html', data=data)

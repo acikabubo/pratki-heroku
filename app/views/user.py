@@ -1,4 +1,4 @@
-from flask import g, redirect, url_for, render_template, flash
+from flask import g, redirect, url_for, render_template, flash, request
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from ..forms import RegistrationForm, LoginForm, UpdateProfileForm
@@ -17,6 +17,9 @@ def register():
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        flash('You have enter invalid data', 'warning')
 
     return redirect(url_for('index'))
 
