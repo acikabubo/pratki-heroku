@@ -55,8 +55,10 @@
     <div class='loading'></div>
     {% block footer %}
         <div class="footer">
-            <a href="supervisor" target="_blank">Supervisor</a><br>
-            <a href="flower" target="_blank">Flower</a>
+            {% if config.DEBUG %}
+                <a href="supervisor" target="_blank">Supervisor</a><br>
+                <a href="flower" target="_blank">Flower</a>
+            {% endif %}
             <div class="container">
                 <div class="row">
                     <div class="span8 offset2">
