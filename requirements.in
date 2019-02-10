@@ -20,4 +20,5 @@ pipdeptree
 dropbox
 redis
 flower
+openpyxl
 -e git+https://github.com/celery/celery.git@master#egg=celery

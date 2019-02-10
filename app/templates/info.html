@@ -30,7 +30,7 @@
                     <td class="txt-padding">{{ item.notice }}</td>
                     <!-- <td class="txt-padding">{{ item.pkg_name }} <button type="button" style="float: right; border-radius: 12px;">Remove</button></td> -->
                     <td class="txt-padding">{{ item.pkg_name }}
-                        {% if item.notice == "Ispora~ana" or item.track_no|length != 13 %}
+                        {% if item.notice|length != 0 or item.track_no|length != 13 %}
                             <input type="checkbox" class="checkbox-info" style="float: right;" name="rm_pkg" value={{ item.track_no }}>
                         {% endif %}
                     </td>
@@ -46,6 +46,7 @@
                             <font color="grey">Total: {{ data.info.total }}</font>
                         {% endif %}
                         <button type="button" class="btn btn-link" data-toggle="modal" data-target="#modalNewSync">Add New Package</button>
+                        <button type="submit" formaction="/export">Export To Excel</button>
                     </td>
                 </tr>
             </tfoot>

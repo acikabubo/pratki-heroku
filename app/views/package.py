@@ -4,97 +4,15 @@ import xmltodict
 from dateutil.parser import parse
 from datetime import datetime, time
 from flask import g, request, jsonify, flash, render_template, \
-    redirect, url_for
+    redirect, url_for, Response
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
 from app import app, db, cache, limiter
 from ..forms import PackageForm, UploadForm
 from ..models import Package
-
-
-
-@app.route('/add_pkgs', methods=['POST'])
-@login_required
-def add_pkgs():
-    form = PackageForm()
-    upload_form = UploadForm()
-
-    if form.validate_on_submit():
-        try:
-            package = Package(
-                track_no=form.track_no.data,
-                shipped_on=form.shipped_on.data,
-                name=form.name.data,
-                user=current_user)
-
-            db.session.add(package)
-            db.session.commit()
-
-            # When user add new package clean cache
-            cache.delete(current_user.username)
-
-            flash('Package created successfully.', 'info')
-            
-            return redirect(url_for('info'))
-        except IntegrityError:
-            db.session.rollback()
-
-            flash(
-                'There is package with tracking number: %s.' % form.track_no.data,
-                'warning')
-
-            return redirect(url_for('info'))
-
-    if 'file' in request.files:
-        uploaded_file = request.files['file']
-
-        if uploaded_file:
-            try:
-                err_occ = False
-
-                file_content = uploaded_file.read().decode('utf8')
-                pkgs = [item.split(' - ') for item in file_content.split('\n')]
-
-                total = 0
-                for track_no, shipped_on, pkg_name in pkgs:
-                    try:
-                        package = Package(
-                            track_no=track_no,
-                            shipped_on=parse(shipped_on, dayfirst=True),
-                            name=pkg_name,
-                            user=current_user
-                        )
-                        db.session.add(package)
-                        db.session.flush()
-
-                        total += 1
-                    except IntegrityError:
-                        db.session.rollback()
-                        continue
-                    except Exception as ex:
-                        err_occ = True
-                        db.session.rollback()
-                        flash('Error occurred while syncing data.', 'warning')
-                        break
-
-                if not err_occ:
-                    db.session.commit()
-
-                    if total:
-                        flash('Sync %s packages.' % total, 'info')
-
-                        return redirect(url_for('info'))
-                    else:
-                        flash('There is no packages for sync.', 'info')
-
-            except Exception as ex:
-                flash(
-                    'Error occurred while reading file or invalid data format.', 'warning')
-
-                return redirect(url_for('info'))
             
 
-@app.route('/info', methods=['GET'])
+@app.route('/info')
 @login_required
 @cache.cached(key_prefix=lambda : current_user.username)
 @limiter.limit('5/hour', key_func = lambda : current_user.username)
@@ -246,6 +164,87 @@ def pkg_details(track_no):
     return render_template('package.html', data=data, cached=True)
 
 
+@app.route('/add_pkgs', methods=['POST'])
+@login_required
+def add_pkgs():
+    form = PackageForm()
+    upload_form = UploadForm()
+
+    if form.validate_on_submit():
+        try:
+            package = Package(
+                track_no=form.track_no.data,
+                shipped_on=form.shipped_on.data,
+                name=form.name.data,
+                user=current_user)
+
+            db.session.add(package)
+            db.session.commit()
+
+            # When user add new package clean cache
+            cache.delete(current_user.username)
+
+            flash('Package created successfully.', 'info')
+            
+            return redirect(url_for('info'))
+        except IntegrityError:
+            db.session.rollback()
+
+            flash(
+                'There is package with tracking number: %s.' % form.track_no.data,
+                'warning')
+
+            return redirect(url_for('info'))
+
+    if 'file' in request.files:
+        uploaded_file = request.files['file']
+
+        if uploaded_file:
+            try:
+                err_occ = False
+
+                file_content = uploaded_file.read().decode('utf8')
+                pkgs = [item.split(' - ') for item in file_content.split('\n')]
+
+                total = 0
+                for track_no, shipped_on, pkg_name in pkgs:
+                    try:
+                        package = Package(
+                            track_no=track_no,
+                            shipped_on=parse(shipped_on, dayfirst=True),
+                            name=pkg_name,
+                            user=current_user
+                        )
+                        db.session.add(package)
+                        db.session.flush()
+
+                        total += 1
+                    except IntegrityError:
+                        db.session.rollback()
+                        continue
+                    except Exception as ex:
+                        err_occ = True
+                        db.session.rollback()
+                        flash('Error occurred while syncing data.', 'warning')
+                        break
+
+                if not err_occ:
+                    db.session.commit()
+
+                    if total:
+                        flash('Sync %s packages.' % total, 'info')
+
+                        return redirect(url_for('info'))
+                    else:
+                        flash('There is no packages for sync.', 'info')
+
+            except Exception as ex:
+                flash(
+                    'Error occurred while reading file or invalid data format.', 'warning')
+
+                return redirect(url_for('info'))
+
+
 @app.route('/delete_pkgs/<pkgs>/', methods=['DELETE'])
 @login_required
 def delete_pkgs(pkgs):
@@ -267,3 +266,59 @@ def delete_pkgs(pkgs):
 
     except Exception:
         db.session.rollback()
+
+
+@app.route('/export')
+@login_required
+def export():
+    from openpyxl import Workbook
+    from openpyxl.styles import Font
+    from io import BytesIO
+
+    print()
+    print('YOU ARE HERE NOW')
+    print()
+    # return "OK"
+
+    output = BytesIO()
+    wb = Workbook()
+
+    # Get active worksheet
+    ws = wb.active
+
+    # Set titles
+    ws['A1'] = "Tracking #"
+    ws['B1'] = "Shipped ago (days)"	
+    ws['C1'] = "Info/Date"
+    ws['D1'] = "Notice"
+    ws['E1'] = "Item name"
+
+    # Set stype for titles
+    font = Font(bold=True)
+    for cell in ws["1:1"]:
+        cell.font = font
+
+    # Get packages from logged user
+    pkgs = Package.query.filter_by(user=current_user).all()
+
+    for item in pkgs:
+        ws.append([
+            item.track_no,
+            item.shipped_on,
+            item.name
+        ])
+    
+    wb.save(output)
+
+    output.seek(0)
+
+    print()
+    print('GENERATED EXCEL REPORT')
+    print()
+
+    return Response(
+        output.read(),
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-disposition":
+                 "attachment; filename=packages.xlsx"})
+    

@@ -8,7 +8,7 @@ mkdir -p -v logs/server
 mkdir -p -v logs/supervisor
 
 # Starting supervisor service
-sudo service supervisor start  # starting supervisor service
+sudo service supervisor start
 
 # Get and update supervisorctl configurations
 supervisorctl reread
