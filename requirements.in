@@ -21,4 +21,4 @@ dropbox
 redis
 flower
 openpyxl
--e git+https://github.com/celery/celery.git@master#egg=celery
+-e git+https://github.com/celery/celery.git@v4.3.0#egg=celery

@@ -37,9 +37,14 @@ RUN pip-sync /tmp/requirements.txt
 # Remove tmp files
 RUN rm -rf /tmp/requirements.in /tmp/requirements.txt
 
-# Set necessary env vars
+# Env vars for database and redis store
+ENV DATABASE_URL postgres://postgres:postgres@pratki-db:5432/pratki
+ENV REDIS_URL redis://pratki-redis:6379
+
+# Env vars for dropbox storage token and file path
 ENV DRPB_ACCESS_TOKEN k3RJ3XBM0RsAAAAAAAADi5DeRos9Wo6mqAe5QX1URifVxBo5JJY2LijhD1-U_Y_t
 ENV FILE_PATH /pratki.txt
+
 # Env vars for oauth credentials
 # Facebook oauth credentials
 ENV FB_ID 1982853558673321
